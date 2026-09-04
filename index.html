@@ -186,6 +186,30 @@ section:first-child{border-top:0}
 .hero .copy{text-align:center; padding:clamp(40px,6vw,88px) var(--cell) clamp(36px,5vw,72px)}
 .hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
 .hero p{margin:clamp(20px,2.5vw,32px) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
+/* hero side cards: two pieces of work flanking the headline (from the original draft, straight, light parallax) */
+.hero .copy{position:relative}
+.hero-card{
+  position:absolute; width:18%; aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden;
+  background:var(--surface); color:var(--on-surface); display:grid; place-items:center; padding:0; z-index:1;
+  box-shadow:0 1px 2px rgba(5,15,17,.08), 0 24px 60px -24px rgba(5,15,17,.35);
+  transition:transform var(--t-slow) var(--ease-out);
+}
+.hero-card img{width:100%; height:100%; object-fit:cover}
+.hero-card .ph{font-size:12px; font-weight:500; opacity:.5}
+.hero-card.l{left:var(--cell); top:52%}
+.hero-card.r{right:var(--cell); top:10%}
+.hero-card:hover{transform:translateY(-3px) scale(1.02)}
+.hero-card.l{opacity:0; animation:settle 1.2s var(--ease-out) 700ms both}
+.hero-card.r{opacity:0; animation:settle 1.2s var(--ease-out) 820ms both}
+@supports (animation-timeline: scroll()){
+  .hero-card .par{display:grid; place-items:center; width:100%; height:100%}
+  .hero-card.l .par{animation:drift-l linear both; animation-timeline:scroll(); animation-range:0 90vh}
+  .hero-card.r .par{animation:drift-r linear both; animation-timeline:scroll(); animation-range:0 90vh}
+  @keyframes drift-l{to{transform:translateY(-40px)}}
+  @keyframes drift-r{to{transform:translateY(-90px)}}
+}
+@media (max-width:900px){ .hero-card{display:none} }
+
 .reel{position:relative; margin-inline:var(--cell); aspect-ratio:21/9; border-radius:var(--r-l); overflow:hidden; background:var(--surface); color:var(--on-surface)}
 @media (max-width:760px){ .reel{aspect-ratio:4/3; border-radius:var(--r-m)} }
 .reel video{width:100%; height:100%; object-fit:cover}
@@ -421,7 +445,8 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .theme:active svg{transform:rotate(30deg)}
 
 @media (prefers-reduced-motion:reduce){
-  .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock{opacity:1; transform:none; animation:none; transition:none}
+  .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock,.hero-card{opacity:1; transform:none; animation:none; transition:none}
+  .hero-card .par{animation:none}
   .hero .copy,.portrait img,.giant span{animation:none}
   *{transition-duration:0ms !important; animation-duration:0ms !important}
 }
@@ -436,6 +461,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     <div class="copy">
       <h1><span class="w"><span>Creative</span></span> <span class="w"><span>Partner</span></span></h1>
       <p>For founders and brands that want to be seen, remembered and chosen.</p>
+      <span id="hero-cards"></span>
     </div>
     <div class="reel">
       <button class="play" type="button" aria-label="Play showreel">
@@ -634,6 +660,17 @@ var STATS=[
       '<div class="meta"><div><h3 id="t-'+p.id+'">'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
     el.addEventListener('click',function(){ openSheet(p, el.querySelector('.thumb')); });
     slot.appendChild(el); grid.appendChild(slot);
+  });
+
+  /* hero cards: first two projects */
+  var hc=document.getElementById('hero-cards');
+  [PROJECTS[0],PROJECTS[1]].forEach(function(p,i){
+    if(!p) return;
+    var b=document.createElement('button'); b.type='button'; b.className='hero-card '+(i?'r':'l');
+    b.setAttribute('aria-label','Open '+p.title); b.setAttribute('aria-haspopup','dialog');
+    b.innerHTML='<span class="par">'+(p.thumb?'<img src="'+p.thumb+'" alt="" width="1600" height="900" decoding="async">':'<span class="ph">16 : 9</span>')+'</span>';
+    b.addEventListener('click',function(){ openSheet(p, b); });
+    hc.appendChild(b);
   });
 
   [].slice.call(document.querySelectorAll('#facts li')).forEach(function(li,i){ li.classList.add('reveal'); li.style.setProperty('--i', String(i+1)); });
