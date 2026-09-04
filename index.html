@@ -172,10 +172,9 @@ section:first-child{border-top:0}
 
 
 /* ── hero ───────────────────────────────────────────── */
-.hero{padding-top:clamp(28px,4vw,48px); padding-bottom:var(--sec); min-height:100svh; display:flex; flex-direction:column}
-@media (max-width:760px){ .hero{min-height:auto} }
+.hero{padding-top:clamp(28px,4vw,48px); padding-bottom:var(--sec); display:flex; flex-direction:column}
 .hero .brand{display:flex; justify-content:center; font-size:32px}
-.hero .copy{text-align:center; margin-block:auto; padding:clamp(56px,9vw,128px) var(--cell)}
+.hero .copy{text-align:center; padding:clamp(40px,6vw,88px) var(--cell) clamp(36px,5vw,72px)}
 .hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
 .hero p{margin:clamp(20px,2.5vw,32px) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
 .reel{position:relative; margin-inline:var(--cell); aspect-ratio:21/9; border-radius:var(--r-l); overflow:hidden; background:var(--surface); color:var(--on-surface)}
@@ -251,7 +250,7 @@ section:first-child{border-top:0}
 @media (max-width:1100px){ .quotes{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:760px){ .quotes{grid-template-columns:1fr} }
 .quote{margin:0; padding-inline:var(--cell); display:flex; flex-direction:column; gap:clamp(20px,2.5vw,32px)}
-.quote p{margin:0; font-size:clamp(19px,1.5vw,24px); line-height:1.35; letter-spacing:-.014em; text-wrap:pretty}
+.quote p{margin:0; font-size:17px; line-height:1.5; letter-spacing:-.008em; text-wrap:pretty}
 .quote p::before{content:"\201C"; margin-left:-.45em; opacity:.5}
 .quote p::after{content:"\201D"; opacity:.5}
 .quote footer{display:flex; align-items:center; gap:var(--s3); margin-top:auto}
@@ -262,10 +261,12 @@ section:first-child{border-top:0}
 .quote .who span{color:var(--muted)}
 
 /* ── about ──────────────────────────────────────────── */
-.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch; column-gap:clamp(24px,4vw,64px); padding-inline:var(--cell)}
-@media (max-width:1100px){ .about-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)} }
+.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch}
+.about-grid > .slot{padding-inline:var(--cell); display:flex; flex-direction:column}
 @media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--gap)} }
-.portrait{height:100%; min-height:420px; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
+.section-body.split::before{content:""; position:absolute; top:0; bottom:0; left:calc(100% / 3); width:1px; background:var(--line); pointer-events:none}
+@media (max-width:760px){ .section-body.split::before{display:none} }
+.portrait{flex:1; min-height:420px; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
 .portrait img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
 @media (max-width:760px){ .portrait{height:auto; min-height:0; aspect-ratio:4/5} }
 .about-copy{max-width:var(--measure)}
@@ -294,7 +295,7 @@ section:first-child{border-top:0}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
-  width:100%; margin:0; padding-top:var(--sec); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
+  width:110%; margin:0 0 0 -5%; padding-top:var(--sec); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
   font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
 }
 .giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
@@ -302,7 +303,7 @@ section:first-child{border-top:0}
 /* ── floating capsule nav ───────────────────────────── */
 .dock{
   position:fixed; left:50%; bottom:calc(var(--s5) + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:20;
-  transition:transform var(--t-slow) var(--ease), opacity var(--t-slow) var(--ease);
+  transition:transform var(--t-base) var(--ease-out), opacity var(--t-base) var(--ease-out);
   display:flex; align-items:center; gap:var(--s1); padding:6px;
   background:var(--glass); -webkit-backdrop-filter:saturate(1.5) blur(20px); backdrop-filter:saturate(1.5) blur(20px);
   border:1px solid var(--line); border-radius:999px;
@@ -472,10 +473,10 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     <div class="section-head">
       <h2 class="reveal">About</h2>
     </div>
-    <div class="section-body">
+    <div class="section-body split">
     <div class="about-grid">
-      <div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div>
-      <div class="about-copy reveal">
+      <div class="slot"><div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div></div>
+      <div class="slot"><div class="about-copy reveal">
         <h3>You have something worth attention. I make sure it gets it.</h3>
         <p>Strategy, design and video. One person, start to finish.</p>
         <p>Based in Lisbon, working with the US and the UK.</p>
@@ -485,7 +486,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
           <li><span class="k">Available</span><span>Q4 2026</span></li>
           <li><span class="k">Email</span><span><a href="mailto:designrobertojr@gmail.com">designrobertojr@gmail.com</a></span></li>
         </ul>
-      </div>
+      </div></div>
     </div>
     </div>
   </section>
@@ -691,7 +692,7 @@ var STATS=[
     dock.addEventListener('animationend',function(){ dock.classList.add('ready'); },{once:true});
     var go=new IntersectionObserver(function(entries){
       entries.forEach(function(e){ dock.classList.toggle('away', e.isIntersecting); });
-    },{threshold:.35});
+    },{threshold:.5});
     go.observe(giant);
     var ro=new IntersectionObserver(function(entries){
       entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
