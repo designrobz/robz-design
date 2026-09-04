@@ -499,14 +499,23 @@ var PROJECTS=[
 
   [].slice.call(document.querySelectorAll('#facts li')).forEach(function(li,i){ li.classList.add('reveal'); li.style.setProperty('--i', String(i+1)); });
 
-  /* giant wordmark: fit to the full viewport width, no distortion */
+  /* giant wordmark: fit the INK of the letters (not the text box) exactly between the outer lines */
   var giant=document.querySelector('.giant'), gs=giant.querySelector('span');
+  var ctx=document.createElement('canvas').getContext('2d');
   function fitGiant(){
-    gs.style.fontSize='100px';
-    var w=gs.getBoundingClientRect().width;
-    var vw=giant.getBoundingClientRect().width;
-    var fs=100*vw/w;
-    gs.style.fontSize=fs+'px'; giant.style.fontSize=fs+'px';
+    var frameW=giant.getBoundingClientRect().width;
+    var fam=getComputedStyle(gs).fontFamily;
+    var txt=gs.textContent.toUpperCase();
+    ctx.font='700 100px '+fam;
+    var track=-4; // letter-spacing at 100px (-.04em)
+    if('letterSpacing' in ctx){ ctx.letterSpacing=track+'px'; } else { gs.style.letterSpacing='0'; track=0; }
+    var m=ctx.measureText(txt);
+    var inkLeft=-m.actualBoundingBoxLeft;                 // where the R's ink starts, relative to the text origin
+    var inkW=m.actualBoundingBoxLeft+m.actualBoundingBoxRight; // ink width at 100px
+    if(!(inkW>0)){ inkW=m.width; inkLeft=0; }
+    var k=frameW/inkW;
+    gs.style.fontSize=(100*k)+'px'; giant.style.fontSize=(100*k)+'px';
+    gs.style.marginLeft=(-inkLeft*k)+'px';
   }
   fitGiant();
   window.addEventListener('resize',fitGiant);
