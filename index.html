@@ -127,12 +127,14 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
 
 /* the grid: each section carries its own columns; content never touches a line */
 .ruled{position:relative; border-inline:1px solid var(--line)}
-.ruled::before,.ruled::after{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line); pointer-events:none}
-.ruled::before{left:calc(100% / 3)} .ruled::after{left:calc(100% / 3 * 2)}
-.ruled.cols-1::before,.ruled.cols-1::after{display:none}
-@media (max-width:1100px){ .work-section::before,.quotes-section::before{left:50%} .work-section::after,.quotes-section::after{display:none} }
-.socials-section::before,.socials-section::after{display:none}
-@media (max-width:760px){ .work-section::before,.quotes-section::before{display:none} }
+/* each section = a head box (title, outer lines only) + a body box (content, with its own grid) */
+.section-head{display:flex; align-items:center; padding:clamp(40px,6vw,96px) var(--cell); border-bottom:1px solid var(--line); margin:0}
+.section-body{position:relative; padding-block:var(--blk)}
+.section-body.flush{padding-block:0}
+.section-body.grid3::before,.section-body.grid3::after{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line); pointer-events:none}
+.section-body.grid3::before{left:calc(100% / 3)} .section-body.grid3::after{left:calc(100% / 3 * 2)}
+@media (max-width:1100px){ .section-body.grid3::before{left:50%} .section-body.grid3::after{display:none} }
+@media (max-width:760px){ .section-body.grid3::before{display:none} }
 /* footer keeps the two outer lines, drawn above the wordmark */
 .foot{position:relative; border-inline:0}
 .foot::before,.foot::after{display:block; z-index:1}
@@ -160,17 +162,16 @@ main{position:relative; z-index:1}
 :root[data-theme="dark"] .theme .moon{display:block}
 
 /* ── sections ───────────────────────────────────────── */
-section{padding-block:var(--sec); border-top:1px solid var(--line)}
+section{padding-block:0; border-top:1px solid var(--line)}
 section:not(.hero){content-visibility:auto; contain-intrinsic-size:auto 900px}
 section:first-child{border-top:0}
-.section-head{margin-bottom:var(--blk)}
 .section-head h2{
   margin:0; font-size:clamp(36px,4.2vw,60px); font-weight:700; letter-spacing:-.035em; line-height:1;
 }
 
 
 /* ── hero ───────────────────────────────────────────── */
-.hero{padding-top:clamp(28px,4vw,48px); padding-bottom:var(--sec); min-height:100svh; display:flex; flex-direction:column}
+.hero{padding-top:clamp(28px,4vw,48px) !important; padding-bottom:var(--sec) !important; min-height:100svh; display:flex; flex-direction:column}
 @media (max-width:760px){ .hero{min-height:auto} }
 .hero .brand{display:flex; justify-content:center; font-size:32px}
 .hero .copy{text-align:center; margin-block:auto; padding:clamp(56px,9vw,128px) var(--cell)}
@@ -275,8 +276,8 @@ section:first-child{border-top:0}
 .facts a:hover{text-decoration-color:currentColor}
 
 /* ── socials ────────────────────────────────────────── */
-.socials{padding-bottom:0; border-bottom:1px solid var(--line)}
-.cells{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-block:1px solid var(--line)}
+.socials{border-bottom:1px solid var(--line)}
+.cells{display:grid; grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:760px){ .cells{grid-template-columns:1fr} }
 .cell{
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--s3);
@@ -411,7 +412,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 
 <main>
   <!-- HERO: outer lines only -->
-  <section class="hero frame ruled cols-1" id="top">
+  <section class="hero frame ruled" id="top">
     <a class="brand" href="#top" aria-label="Robz, home"><span class="wordmark">Robz<sup>®</sup></span></a>
     <div class="copy">
       <h1><span class="w"><span>Creative</span></span> <span class="w"><span>Partner</span></span></h1>
@@ -426,23 +427,26 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   </section>
 
   <!-- PROOF -->
-  <section class="frame ruled cols-1 proof-section" id="proof" aria-label="Results">
+  <section class="frame ruled proof-section" id="proof" aria-label="Results">
     <div class="stats" id="stats"></div>
   </section>
 
   <!-- WORK -->
-  <section class="frame ruled work-section" id="work">
-    <div class="section-head cell-pad">
+  <section class="frame ruled" id="work">
+    <div class="section-head">
       <h2 class="reveal">Work</h2>
     </div>
-    <div class="work-grid" id="grid"></div>
+    <div class="section-body grid3">
+      <div class="work-grid" id="grid"></div>
+    </div>
   </section>
 
   <!-- TESTIMONIALS -->
-  <section class="frame ruled quotes-section" id="testimonials">
-    <div class="section-head cell-pad">
+  <section class="frame ruled" id="testimonials">
+    <div class="section-head">
       <h2 class="reveal">Kind words</h2>
     </div>
+    <div class="section-body grid3">
     <div class="quotes">
       <figure class="quote reveal" style="--i:0">
         <p>Placeholder. Two or three lines on what changed after working together, in the client's own words.</p>
@@ -457,13 +461,15 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
         <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
       </figure>
     </div>
+    </div>
   </section>
 
   <!-- ABOUT -->
-  <section class="frame ruled cols-1" id="about">
-    <div class="section-head cell-pad">
+  <section class="frame ruled" id="about">
+    <div class="section-head">
       <h2 class="reveal">About</h2>
     </div>
+    <div class="section-body">
     <div class="about-grid">
       <div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div>
       <div class="about-copy reveal">
@@ -478,17 +484,20 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
         </ul>
       </div>
     </div>
+    </div>
   </section>
 
   <!-- SOCIALS -->
-  <section class="socials frame ruled socials-section" id="socials">
-    <div class="section-head cell-pad">
+  <section class="socials frame ruled" id="socials">
+    <div class="section-head">
       <h2 class="reveal">Socials</h2>
     </div>
+    <div class="section-body flush">
     <div class="cells">
       <a class="cell reveal" href="https://www.linkedin.com/in/roberto-junior-48630a33a" target="_blank" rel="noopener"><span class="glyph">in</span><span class="name">LinkedIn</span></a>
       <a class="cell reveal" style="--i:1" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
       <a class="cell reveal" style="--i:2" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
+    </div>
     </div>
   </section>
   <footer class="frame ruled foot"><div class="giant" aria-hidden="true"><span>Robz</span></div></footer>
