@@ -9,8 +9,8 @@
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Roberto Junior">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#b7e7fc" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#050f11" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="theme-color" content="#b7e7fc">
+<script>try{if(localStorage.getItem('robz-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Robz">
@@ -98,6 +98,7 @@
   --t-fast:160ms; --t-base:280ms; --t-slow:560ms; --t-reveal:900ms;
 }
 :root[data-theme="dark"]{
+  color-scheme:dark;
   --bg:var(--ink); --fg:var(--sky);
   --line:rgba(183,231,252,.1); --line-strong:rgba(183,231,252,.28);
   --muted:rgba(183,231,252,.6);
@@ -114,13 +115,13 @@ body{
   margin:0; background:var(--bg); color:var(--fg);
   font-family:var(--font); font-size:17px; line-height:1.45;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
-  transition:background-color var(--t-base) var(--ease), color var(--t-base) var(--ease);
 }
+html.ready body{transition:background-color var(--t-base) var(--ease), color var(--t-base) var(--ease)}
 body.locked{overflow:hidden}
 a{color:inherit; text-decoration:none}
 img,video{display:block; max-width:100%}
 button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer}
-:focus-visible{outline:2px solid var(--focus); outline-offset:4px; border-radius:6px}
+:focus-visible{outline:2px solid var(--focus); outline-offset:4px}
 .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 
 .frame{width:min(100% - var(--gutter)*2, var(--col-max)); margin-inline:auto}
@@ -171,7 +172,7 @@ section:first-child{border-top:0}
 
 
 /* ── hero ───────────────────────────────────────────── */
-.hero{padding-top:clamp(28px,4vw,48px) !important; padding-bottom:var(--sec) !important; min-height:100svh; display:flex; flex-direction:column}
+.hero{padding-top:clamp(28px,4vw,48px); padding-bottom:var(--sec); min-height:100svh; display:flex; flex-direction:column}
 @media (max-width:760px){ .hero{min-height:auto} }
 .hero .brand{display:flex; justify-content:center; font-size:32px}
 .hero .copy{text-align:center; margin-block:auto; padding:clamp(56px,9vw,128px) var(--cell)}
@@ -201,17 +202,17 @@ section:first-child{border-top:0}
 
 /* ── work ───────────────────────────────────────────── */
 .work-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--blk)}
-.work-grid .card{padding-inline:var(--cell)}
+.work-grid .slot{padding-inline:var(--cell)}
 @media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:760px){ .work-grid{grid-template-columns:1fr} }
-.card{display:block; text-align:left; width:100%; color:inherit}
+.card{display:block; text-align:left; width:100%; color:inherit; cursor:pointer}
 .card .thumb{
-  aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden; background:var(--surface); color:var(--on-surface);
-  display:grid; place-items:center; transition:transform var(--t-base) var(--ease);
+  position:relative; width:100%; aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden;
+  background:var(--surface); color:var(--on-surface); display:block;
+  transition:transform var(--t-slow) var(--ease-out);
 }
 .card .thumb img{width:100%; height:100%; object-fit:cover}
-.card .thumb > span{font-size:13px; font-weight:500; opacity:.5}
-.card .thumb{position:relative}
+.card .thumb .main span{font-size:13px; font-weight:500; opacity:.5}
 .card .thumb .main{position:absolute; inset:0; display:grid; place-items:center; transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out)}
 
 /* feed preview: the thumbnail at feed size, among other videos */
@@ -237,9 +238,10 @@ section:first-child{border-top:0}
 /* the same feed inside the popup, for everyone */
 .sheet-feed{position:relative; aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden}
 .sheet-feed .feed{opacity:1; transform:none}
-.sheet-feed .cap{position:absolute; left:16px; bottom:12px; font-size:13px; color:#aaa}
+.sheet-feed{margin-bottom:var(--s2)}
+.sheet-feed + .cap,.sheet-media .cap{display:block; font-size:13px; color:var(--muted); margin:0 0 var(--s3)}
 .card:hover .thumb{transform:translateY(-3px)}
-.card .meta{display:flex; justify-content:space-between; gap:var(--s4); margin-top:var(--s4)}
+.card .meta{display:flex; justify-content:space-between; align-items:baseline; gap:var(--s4); margin-top:var(--s4)}
 .card h3{margin:0; font-size:18px; font-weight:600; letter-spacing:-.014em}
 .card .role{margin:var(--s1) 0 0; font-size:15px; color:var(--muted)}
 .card .year{font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0}
@@ -270,7 +272,8 @@ section:first-child{border-top:0}
 .about-copy h3{margin:0 0 clamp(20px,2.5vw,32px); font-size:clamp(28px,3.2vw,48px); font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance}
 .about-copy p{margin:0 0 var(--s4); font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em}
 .facts{list-style:none; margin:var(--blk) 0 0; padding:0; border-top:1px solid var(--line)}
-.facts li{display:grid; grid-template-columns:minmax(120px,1fr) minmax(0,2fr); gap:var(--s4); padding:var(--s4) 0; border-bottom:1px solid var(--line); font-size:16px}
+.facts li{display:grid; grid-template-columns:minmax(120px,1fr) minmax(0,2fr); gap:var(--s4); padding:var(--s4) 0; border-bottom:1px solid var(--line); font-size:16px; overflow-wrap:anywhere}
+@media (max-width:760px){ .facts li{grid-template-columns:1fr; gap:var(--s1)} }
 .facts .k{color:var(--muted)}
 .facts a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
 .facts a:hover{text-decoration-color:currentColor}
@@ -286,7 +289,8 @@ section:first-child{border-top:0}
 }
 .cell:last-child{border-right:0}
 @media (max-width:760px){ .cell{border-right:0; border-bottom:1px solid var(--line)} .cell:last-child{border-bottom:0} }
-.cell:hover,.cell:focus-visible{background:var(--surface); color:var(--on-surface); outline-offset:-4px}
+.cell:hover,.cell:focus-visible{background:var(--surface); color:var(--on-surface)}
+.cell:focus-visible{outline-color:var(--on-surface); outline-offset:-6px}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
@@ -306,11 +310,11 @@ section:first-child{border-top:0}
 }
 .dock a{
   display:inline-flex; align-items:center; height:44px; padding:0 18px; border-radius:999px;
-  font-size:16px; font-weight:500; letter-spacing:-.01em; color:var(--muted);
+  font-size:16px; font-weight:500; letter-spacing:-.01em; color:var(--fg);
   transition:background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 .dock.away{transform:translate(-50%, 160%); opacity:0; pointer-events:none}
-.dock .round{width:44px; height:44px; border:0; background:transparent; -webkit-backdrop-filter:none; backdrop-filter:none; color:var(--muted)}
+.dock .round{width:44px; height:44px; border:0; background:transparent; -webkit-backdrop-filter:none; backdrop-filter:none; color:var(--fg)}
 .dock .round:hover{background:var(--chip); color:var(--fg)}
 .dock a:hover{color:var(--fg)}
 .dock a[aria-current="true"]{background:var(--chip); color:var(--fg); font-weight:600}
@@ -319,8 +323,7 @@ section:first-child{border-top:0}
 .dock .cta svg{width:16px; height:16px}
 @media (max-width:760px){
   .dock{bottom:calc(var(--s4) + env(safe-area-inset-bottom)); padding:5px}
-  .dock a{height:42px; padding:0 12px; font-size:15px}
-  .dock .round{width:42px; height:42px}
+  .dock a{padding:0 12px; font-size:15px}
 }
 
 /* ── project sheet (dialog) ─────────────────────────── */
@@ -329,6 +332,7 @@ dialog.sheet{
   border:0; border-radius:var(--r-l); background:var(--bg); color:var(--fg); overflow:hidden;
   box-shadow:0 40px 120px -30px rgba(0,0,0,.5);
 }
+:root[data-theme="dark"] dialog.sheet{border:1px solid var(--line-strong)}
 dialog.sheet::backdrop{background:rgba(5,15,17,.55); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px)}
 dialog.sheet[open]{animation:sheet-in var(--t-slow) var(--ease)}
 dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
@@ -343,7 +347,7 @@ dialog.sheet[open] .sheet-body > :nth-child(2){animation-delay:80ms}
 dialog.sheet[open] .sheet-body > :nth-child(3){animation-delay:160ms}
 dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .sheet-head{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:var(--s6); margin-bottom:var(--s6)}
-@media (max-width:760px){ .sheet-head{grid-template-columns:1fr; gap:var(--s4)} }
+@media (max-width:760px){ .sheet-head{grid-template-columns:1fr; gap:var(--s4); padding-right:calc(44px + var(--s4))} }
 .sheet-head h2{margin:0; font-size:clamp(32px,4vw,56px); font-weight:700; letter-spacing:-.035em; line-height:1}
 .sheet-head .meta{list-style:none; margin:0; padding:0; font-size:15px; color:var(--muted)}
 .sheet-head .meta li{display:flex; justify-content:space-between; gap:var(--s4); padding:var(--s2) 0; border-bottom:1px solid var(--line)}
@@ -376,12 +380,11 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .hero h1 .w:nth-child(2) > span{animation-delay:90ms}
 .hero p{opacity:0; animation:rise var(--t-reveal) var(--ease-out) 380ms both}
 .hero .reel{transform:scale(.96) translateY(24px); animation:settle 1.2s var(--ease-out) 520ms both}
-.dock{animation:dock-in .9s var(--ease-out) 900ms both}
+.dock:not(.ready){animation:dock-in .9s var(--ease-out) 900ms both}
 @keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
 @keyframes mask-up{from{transform:translateY(110%)} to{transform:none}}
 @keyframes settle{from{opacity:0; transform:scale(.96) translateY(24px)} to{opacity:1; transform:none}}
 @keyframes dock-in{from{opacity:0; transform:translate(-50%,24px)} to{opacity:1; transform:translate(-50%,0)}}
-.dock.away{animation:none}
 
 /* scroll-driven, where the browser supports it: hero recedes, portrait and wordmark ease in */
 @supports (animation-timeline: scroll()){
@@ -395,7 +398,6 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 }
 
 /* hover: quiet lift, image breathes */
-.card .thumb{transition:transform var(--t-slow) var(--ease-out)}
 .card .thumb img{transition:transform 1.2s var(--ease-out)}
 .card:hover .thumb img{transform:scale(1.04)}
 .card:active .thumb{transform:translateY(-1px) scale(.995)}
@@ -594,7 +596,9 @@ var STATS=[
   /* theme */
   var btn=document.querySelector('.theme');
   function current(){ return root.getAttribute('data-theme')==='dark'?'dark':'light'; }
-  function sync(){ btn.setAttribute('aria-pressed', current()==='dark'?'true':'false'); }
+  var meta=document.getElementById('theme-color');
+  function sync(){ var d=current()==='dark'; btn.setAttribute('aria-pressed', d?'true':'false'); if(meta) meta.setAttribute('content', d?'#050f11':'#b7e7fc'); }
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ root.classList.add('ready'); }); });
   try{ if(localStorage.getItem('robz-theme')==='dark') root.setAttribute('data-theme','dark'); }catch(e){}
   sync();
   btn.addEventListener('click',function(){
@@ -607,13 +611,13 @@ var STATS=[
   /* work: cards */
   var grid=document.getElementById('grid');
   PROJECTS.forEach(function(p,i){
-    var el=document.createElement('button');
-    el.className='card reveal'; el.type='button'; el.dataset.id=p.id; el.setAttribute('aria-haspopup','dialog');
-    el.style.setProperty('--i', String(i%3));
-    el.innerHTML='<div class="thumb"><div class="main">'+(p.thumb? '<img src="'+p.thumb+'" alt="'+p.title+'" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+feedHTML(p, 1)+'</div>'+
-      '<div class="meta"><div><h3>'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
-    el.addEventListener('click',function(){ openSheet(p, el); });
-    grid.appendChild(el);
+    var slot=document.createElement('div'); slot.className='slot';
+    var el=document.createElement('article');
+    el.className='card reveal'; el.dataset.id=p.id; el.style.setProperty('--i', String(i%3));
+    el.innerHTML='<button class="thumb" type="button" aria-haspopup="dialog" aria-labelledby="t-'+p.id+'"><div class="main">'+(p.thumb? '<img src="'+p.thumb+'" alt="" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+feedHTML(p, 1)+'</button>'+
+      '<div class="meta"><div><h3 id="t-'+p.id+'">'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
+    el.addEventListener('click',function(){ openSheet(p, el.querySelector('.thumb')); });
+    slot.appendChild(el); grid.appendChild(slot);
   });
 
   [].slice.call(document.querySelectorAll('#facts li')).forEach(function(li,i){ li.classList.add('reveal'); li.style.setProperty('--i', String(i+1)); });
@@ -652,7 +656,7 @@ var STATS=[
       '<li><span>Client</span><span>'+p.client+'</span></li>'+
       '<li><span>Year</span><span>'+p.year+'</span></li>';
     document.getElementById('sheet-outcome').textContent=p.outcome||'';
-    var m=document.getElementById('sheet-media'); m.innerHTML='<div class="sheet-feed">'+feedHTML(p, 4)+'<span class="cap">In the feed, at real size</span></div>';
+    var m=document.getElementById('sheet-media'); m.innerHTML='<div class="sheet-feed">'+feedHTML(p, 4)+'</div><span class="cap">In the feed, among other videos.</span>';
     var n=p.media||0;
     if(n>0) m.innerHTML+='<div class="m"><span>Hero image or video</span></div>';
     if(n>1){ var row='<div class="row">'; for(var i=1;i<n;i++) row+='<div class="m half"><span>Detail '+i+'</span></div>'; row+='</div>'; m.innerHTML+=row; }
@@ -669,7 +673,6 @@ var STATS=[
   });
   document.getElementById('sheet-close').addEventListener('click',closeSheet);
   sheet.addEventListener('cancel',function(e){ e.preventDefault(); closeSheet(); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && sheet.open) closeSheet(); });
   sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
 
   /* active section in the dock */
@@ -685,6 +688,7 @@ var STATS=[
     },{rootMargin:'-40% 0px -50% 0px'});
     sections.forEach(function(s){ if(s) so.observe(s); });
     var dock=document.querySelector('.dock');
+    dock.addEventListener('animationend',function(){ dock.classList.add('ready'); },{once:true});
     var go=new IntersectionObserver(function(entries){
       entries.forEach(function(e){ dock.classList.toggle('away', e.isIntersecting); });
     },{threshold:.35});
