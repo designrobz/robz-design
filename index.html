@@ -79,6 +79,8 @@
   --glass:rgba(183,231,252,.72);
   --chip:rgba(5,15,17,.08);
   --focus:var(--ink);
+  --grid:rgba(5,15,17,.045);   /* margin texture; the grid lines are .11 */
+  --grid-size:24px;
 
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
 
@@ -105,6 +107,7 @@
   --surface:var(--sky); --on-surface:var(--ink);
   --glass:rgba(5,15,17,.72); --chip:rgba(183,231,252,.1);
   --focus:var(--sky);
+  --grid:rgba(183,231,252,.045);
 }
 
 /* ── base ───────────────────────────────────────────── */
@@ -115,7 +118,12 @@ body{
   margin:0; background:var(--bg); color:var(--fg);
   font-family:var(--font); font-size:17px; line-height:1.45;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:var(--grid-size) var(--grid-size);
+  background-position:var(--frame-left,0) 0;
+  background-attachment:fixed;
 }
+main .frame, footer.frame{background:var(--bg)}
 html.ready body{transition:background-color var(--t-base) var(--ease), color var(--t-base) var(--ease)}
 body.locked{overflow:hidden}
 a{color:inherit; text-decoration:none}
@@ -137,7 +145,7 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
 @media (max-width:1100px){ .section-body.grid3::before{left:50%} .section-body.grid3::after{display:none} }
 @media (max-width:760px){ .section-body.grid3::before{display:none} }
 /* footer keeps the two outer lines, drawn above the wordmark */
-.foot{position:relative; border-inline:0}
+.foot{position:relative; border-inline:0; overflow:hidden}
 .foot::before,.foot::after{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line); pointer-events:none; z-index:1}
 .foot::before{left:0} .foot::after{right:0}
 .foot .giant{position:relative; z-index:0}
@@ -263,17 +271,23 @@ section:first-child{border-top:0}
 /* ── about ──────────────────────────────────────────── */
 .about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch}
 .about-grid > .slot{padding-inline:var(--cell); display:flex; flex-direction:column}
+.about-grid > .slot.text{padding-inline:0}
+.about-grid > .slot.text > .about-copy{display:flex; flex-direction:column; height:100%}
+.about-copy > h3,.about-copy > p{padding-inline:var(--cell)}
 @media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--gap)} }
 .section-body.split::before{content:""; position:absolute; top:0; bottom:0; left:calc(100% / 3); width:1px; background:var(--line); pointer-events:none}
 @media (max-width:760px){ .section-body.split::before{display:none} }
-.portrait{flex:1; min-height:420px; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
+.portrait{aspect-ratio:1/1; min-height:0; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
 .portrait img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
-@media (max-width:760px){ .portrait{height:auto; min-height:0; aspect-ratio:4/5} }
-.about-copy{max-width:var(--measure)}
-.about-copy h3{margin:0 0 clamp(20px,2.5vw,32px); font-size:clamp(28px,3.2vw,48px); font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance}
-.about-copy p{margin:0 0 var(--s4); font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em}
-.facts{list-style:none; margin:var(--blk) 0 0; padding:0; border-top:1px solid var(--line)}
-.facts li{display:grid; grid-template-columns:minmax(120px,1fr) minmax(0,2fr); gap:var(--s4); padding:var(--s4) 0; border-bottom:1px solid var(--line); font-size:16px; overflow-wrap:anywhere}
+
+.about-copy{max-width:none}
+.about-copy h3{margin:0 0 clamp(20px,2.5vw,32px); font-size:clamp(28px,3.4vw,52px); max-width:20ch; font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance}
+.about-copy p{margin:0 0 var(--s4); font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em; max-width:var(--measure)}
+.facts{list-style:none; margin:auto 0 0; padding:0; border-top:1px solid var(--line)}
+.facts li{display:grid; grid-template-columns:minmax(120px,1fr) minmax(0,2fr); gap:var(--s4); padding:var(--s4) var(--cell); border-bottom:1px solid var(--line); font-size:16px; overflow-wrap:anywhere}
+.facts li:last-child{border-bottom:0}
+.about-copy{padding-top:0}
+.about-copy > h3{padding-top:0}
 @media (max-width:760px){ .facts li{grid-template-columns:1fr; gap:var(--s1)} }
 .facts .k{color:var(--muted)}
 .facts a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
@@ -476,7 +490,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     <div class="section-body split">
     <div class="about-grid">
       <div class="slot"><div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div></div>
-      <div class="slot"><div class="about-copy reveal">
+      <div class="slot text"><div class="about-copy reveal">
         <h3>You have something worth attention. I make sure it gets it.</h3>
         <p>Strategy, design and video. One person, start to finish.</p>
         <p>Based in Lisbon, working with the US and the UK.</p>
@@ -641,8 +655,9 @@ var STATS=[
     gs.style.fontSize=(100*k)+'px'; giant.style.fontSize=(100*k)+'px';
     gs.style.marginLeft=(-inkLeft*k)+'px';
   }
-  fitGiant();
-  window.addEventListener('resize',fitGiant);
+  function alignTexture(){ var f=document.querySelector('main .frame'); if(f) root.style.setProperty('--frame-left', Math.round(f.getBoundingClientRect().left)+'px'); }
+  fitGiant(); alignTexture();
+  window.addEventListener('resize',function(){ fitGiant(); alignTexture(); });
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitGiant);
 
   /* project sheet */
