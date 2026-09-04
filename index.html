@@ -238,7 +238,7 @@ section:first-child{border-top:0}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
-  width:100vw; margin:0 0 0 calc(50% - 50vw); padding-top:var(--s9); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
+  width:100%; margin:0; padding-top:var(--s9); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
   font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
 }
 .giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
@@ -504,7 +504,7 @@ var PROJECTS=[
   function fitGiant(){
     gs.style.fontSize='100px';
     var w=gs.getBoundingClientRect().width;
-    var vw=document.documentElement.clientWidth;
+    var vw=giant.getBoundingClientRect().width;
     var fs=100*vw/w;
     gs.style.fontSize=fs+'px'; giant.style.fontSize=fs+'px';
   }
