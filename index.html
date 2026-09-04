@@ -188,6 +188,16 @@ section:first-child{border-top:0}
 .reel .play:hover{transform:scale(1.06)}
 .reel .play svg{width:22px; height:22px; margin-left:3px}
 
+/* ── proof band ─────────────────────────────────────── */
+.proof-section{padding-block:0}
+.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:760px){ .stats{grid-template-columns:1fr} }
+.stat{padding:clamp(28px,4vw,56px) var(--cell); border-right:1px solid var(--line); display:flex; flex-direction:column; gap:6px}
+.stat:last-child{border-right:0}
+@media (max-width:760px){ .stat{border-right:0; border-bottom:1px solid var(--line)} .stat:last-child{border-bottom:0} }
+.stat .n{font-size:clamp(40px,4.6vw,68px); font-weight:700; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+.stat .l{font-size:15px; color:var(--muted); letter-spacing:-.005em}
+
 /* ── work ───────────────────────────────────────────── */
 .work-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--blk)}
 .work-grid .card{padding-inline:var(--cell)}
@@ -199,7 +209,34 @@ section:first-child{border-top:0}
   display:grid; place-items:center; transition:transform var(--t-base) var(--ease);
 }
 .card .thumb img{width:100%; height:100%; object-fit:cover}
-.card .thumb span{font-size:13px; font-weight:500; opacity:.5}
+.card .thumb > span{font-size:13px; font-weight:500; opacity:.5}
+.card .thumb{position:relative}
+.card .thumb .main{position:absolute; inset:0; display:grid; place-items:center; transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out)}
+
+/* feed preview: the thumbnail at feed size, among other videos */
+.feed{
+  position:absolute; inset:0; padding:6%; background:#0f0f0f; color:#f1f1f1;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:5% 4%; align-content:center;
+  opacity:0; transform:scale(1.04); transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out);
+}
+.feed .v{display:flex; flex-direction:column; gap:6%}
+.feed .v .t{aspect-ratio:16/9; border-radius:8%/14%; background:#272727; overflow:hidden}
+.feed .v .t img{width:100%; height:100%; object-fit:cover}
+.feed .v .r{display:flex; gap:5%}
+.feed .v .r i{display:block; width:14%; aspect-ratio:1; border-radius:50%; background:#3a3a3a; flex-shrink:0}
+.feed .v .r b{display:block; flex:1}
+.feed .v .r b::before,.feed .v .r b::after{content:""; display:block; height:5px; border-radius:3px; background:#3a3a3a; margin-bottom:5px}
+.feed .v .r b::after{width:60%}
+.feed .v.you .t{background:var(--sky); outline:2px solid var(--sky); outline-offset:2px}
+.feed .v.you .r b::before{background:#f1f1f1}
+.card:hover .thumb .main,.card:focus-visible .thumb .main{opacity:0; transform:scale(.96)}
+.card:hover .thumb .feed,.card:focus-visible .thumb .feed{opacity:1; transform:none}
+@media (hover:none){ .card .thumb .feed{display:none} }
+
+/* the same feed inside the popup, for everyone */
+.sheet-feed{position:relative; aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden}
+.sheet-feed .feed{opacity:1; transform:none}
+.sheet-feed .cap{position:absolute; left:16px; bottom:12px; font-size:13px; color:#aaa}
 .card:hover .thumb{transform:translateY(-3px)}
 .card .meta{display:flex; justify-content:space-between; gap:var(--s4); margin-top:var(--s4)}
 .card h3{margin:0; font-size:18px; font-weight:600; letter-spacing:-.014em}
@@ -388,6 +425,11 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     </div>
   </section>
 
+  <!-- PROOF -->
+  <section class="frame ruled cols-1 proof-section" id="proof" aria-label="Results">
+    <div class="stats" id="stats"></div>
+  </section>
+
   <!-- WORK -->
   <section class="frame ruled work-section" id="work">
     <div class="section-head cell-pad">
@@ -500,8 +542,44 @@ var PROJECTS=[
   {id:'p6',title:'Project six',role:'Thumbnails',client:'Client',year:'2025',outcome:'One line on what changed for the client.',media:3,href:'',thumb:''}
 ];
 
+/* proof band — PLACEHOLDER numbers, replace with real ones */
+var STATS=[
+  {value:120, suffix:'M+', label:'views on thumbnails I designed'},
+  {value:38,  prefix:'+', suffix:'%', label:'average click-through lift'},
+  {value:300, suffix:'+', label:'thumbnails shipped'}
+];
+
 (function(){
   var root=document.documentElement;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* stats: count up on entry */
+  var statsEl=document.getElementById('stats');
+  STATS.forEach(function(st,i){
+    var d=document.createElement('div'); d.className='stat reveal'; d.style.setProperty('--i',String(i));
+    d.innerHTML='<span class="n" data-v="'+st.value+'" data-p="'+(st.prefix||'')+'" data-s="'+(st.suffix||'')+'">'+(st.prefix||'')+'0'+(st.suffix||'')+'</span><span class="l">'+st.label+'</span>';
+    statsEl.appendChild(d);
+  });
+  function tick(el){
+    var v=+el.dataset.v, p=el.dataset.p, sfx=el.dataset.s, t0=null, dur=1400;
+    if(reduce){ el.textContent=p+v+sfx; return; }
+    function step(ts){ if(!t0) t0=ts; var k=Math.min(1,(ts-t0)/dur); var e=1-Math.pow(1-k,4); el.textContent=p+Math.round(v*e)+sfx; if(k<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var to=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ tick(e.target); to.unobserve(e.target); } }); },{threshold:.6});
+    statsEl.querySelectorAll('.n').forEach(function(n){ to.observe(n); });
+  } else { statsEl.querySelectorAll('.n').forEach(tick); }
+
+  /* feed mock: your thumbnail among five others */
+  function feedHTML(p, slot){
+    var h='<div class="feed" aria-hidden="true">';
+    for(var i=0;i<6;i++){
+      var you=(i===slot);
+      h+='<div class="v'+(you?' you':'')+'"><div class="t">'+(you&&p.thumb?'<img src="'+p.thumb+'" alt="">':'')+'</div><div class="r"><i></i><b></b></div></div>';
+    }
+    return h+'</div>';
+  }
 
   /* theme */
   var btn=document.querySelector('.theme');
@@ -522,7 +600,7 @@ var PROJECTS=[
     var el=document.createElement('button');
     el.className='card reveal'; el.type='button'; el.dataset.id=p.id; el.setAttribute('aria-haspopup','dialog');
     el.style.setProperty('--i', String(i%3));
-    el.innerHTML='<div class="thumb">'+(p.thumb? '<img src="'+p.thumb+'" alt="'+p.title+'" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+
+    el.innerHTML='<div class="thumb"><div class="main">'+(p.thumb? '<img src="'+p.thumb+'" alt="'+p.title+'" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+feedHTML(p, 1)+'</div>'+
       '<div class="meta"><div><h3>'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
     el.addEventListener('click',function(){ openSheet(p, el); });
     grid.appendChild(el);
@@ -564,7 +642,7 @@ var PROJECTS=[
       '<li><span>Client</span><span>'+p.client+'</span></li>'+
       '<li><span>Year</span><span>'+p.year+'</span></li>';
     document.getElementById('sheet-outcome').textContent=p.outcome||'';
-    var m=document.getElementById('sheet-media'); m.innerHTML='';
+    var m=document.getElementById('sheet-media'); m.innerHTML='<div class="sheet-feed">'+feedHTML(p, 4)+'<span class="cap">In the feed, at real size</span></div>';
     var n=p.media||0;
     if(n>0) m.innerHTML+='<div class="m"><span>Hero image or video</span></div>';
     if(n>1){ var row='<div class="row">'; for(var i=1;i<n;i++) row+='<div class="m half"><span>Detail '+i+'</span></div>'; row+='</div>'; m.innerHTML+=row; }
