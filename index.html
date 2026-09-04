@@ -127,7 +127,13 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
 .ruled::before{left:calc(100% / 3)} .ruled::after{left:calc(100% / 3 * 2)}
 .ruled.cols-1::before,.ruled.cols-1::after{display:none}
 @media (max-width:1100px){ .work-section::before{left:50%} .work-section::after{display:none} }
-@media (max-width:760px){ .work-section::before,.socials-section::before,.socials-section::after{display:none} }
+.socials-section::before,.socials-section::after{display:none}
+@media (max-width:760px){ .work-section::before{display:none} }
+/* footer keeps the two outer lines, drawn above the wordmark */
+.foot{position:relative; border-inline:0}
+.foot::before,.foot::after{display:block; z-index:1}
+.foot::before{left:0} .foot::after{left:auto; right:0}
+.foot .giant{position:relative; z-index:0}
 main{position:relative; z-index:1}
 .cell-pad{padding-inline:var(--cell)}
 
@@ -201,9 +207,8 @@ section:first-child{border-top:0}
 .card .year{font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0}
 
 /* ── about ──────────────────────────────────────────── */
-.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch}
-.about-grid > *{padding-inline:var(--cell)}
-@media (max-width:1100px){ .about-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)} }
+.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch; column-gap:var(--s8); padding-inline:var(--cell)}
+@media (max-width:1100px){ .about-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr); column-gap:var(--s6)} }
 @media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--s5)} }
 .portrait{height:100%; min-height:420px; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
 .portrait img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
@@ -232,7 +237,7 @@ section:first-child{border-top:0}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
-  width:100vw; margin:0; padding-top:var(--s9); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
+  width:100vw; margin:0 0 0 calc(50% - 50vw); padding-top:var(--s9); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
   font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
 }
 .giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
@@ -366,7 +371,7 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
       <a class="cell" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
     </div>
   </section>
-  <div class="giant" aria-hidden="true"><span>Robz</span></div>
+  <footer class="frame ruled foot"><div class="giant" aria-hidden="true"><span>Robz</span></div></footer>
 </main>
 
 <!-- FLOATING NAV -->
