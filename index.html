@@ -301,7 +301,7 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .sheet-feed .feed{opacity:1; transform:none}
 .sheet-feed{margin-bottom:var(--s2)}
 .sheet-feed + .cap,.sheet-media .cap{display:block; font-size:13px; color:var(--muted); margin:0 0 var(--s3)}
-.card:hover .thumb{transform:translateY(-3px)}
+.card:hover .thumb:not(.tilt3d){transform:translateY(-3px)}
 .card .meta{display:flex; justify-content:space-between; align-items:baseline; gap:var(--s4); margin-top:var(--s4)}
 .card h3{margin:0; font-size:18px; font-weight:600; letter-spacing:-.014em}
 .card .role{margin:var(--s1) 0 0; font-size:15px; color:var(--muted)}
@@ -435,6 +435,56 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .sheet-link:hover{text-decoration-color:currentColor}
 .sheet-link svg{width:16px; height:16px}
 
+/* ── interaction: everything you can touch answers back ── */
+/* magnetic pull (JS sets --mx/--my) */
+.magnet{translate:var(--mx,0) var(--my,0); transition:translate var(--t-base) var(--ease-out)}
+.magnet:hover{transition-duration:var(--t-fast)}
+/* arrows slide */
+.btn svg,.dock .cta svg,.sheet-link svg{transition:transform var(--t-base) var(--ease-out)}
+.btn:hover svg,.dock .cta:hover svg,.sheet-link:hover svg{transform:translateX(3px)}
+/* 3D tilt (JS sets --rx/--ry) */
+.tilt3d{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0)); transition:transform var(--t-slow) var(--ease-out); transform-style:preserve-3d; will-change:transform}
+.card:hover .thumb.tilt3d{--ty:-4px}
+.card .thumb{box-shadow:0 1px 2px rgba(5,15,17,.06), 0 0 0 rgba(5,15,17,0); transition:transform var(--t-slow) var(--ease-out), box-shadow var(--t-slow) var(--ease-out)}
+.card:hover .thumb{box-shadow:0 2px 4px rgba(5,15,17,.08), 0 28px 60px -24px rgba(5,15,17,.45)}
+/* dock: one highlight that glides between items */
+.dock{isolation:isolate}
+.dock .ind{position:absolute; top:6px; bottom:6px; left:0; width:0; border-radius:999px; background:var(--chip); z-index:-1; opacity:0; transition:left var(--t-base) var(--ease-out), width var(--t-base) var(--ease-out), opacity var(--t-fast) var(--ease)}
+.dock .ind.on{opacity:1}
+.dock a[aria-current="true"]{background:transparent}
+.dock a{position:relative}
+/* socials cells: glyph answers */
+.cell .glyph{transition:transform var(--t-slow) var(--ease-out)}
+.cell:hover .glyph{transform:scale(1.12) rotate(-4deg)}
+.cell .name{transition:transform var(--t-slow) var(--ease-out), opacity var(--t-slow) var(--ease-out)}
+.cell:hover .name{transform:translateY(2px)}
+/* facts rows */
+.facts li{transition:background-color var(--t-fast) var(--ease)}
+.facts li:hover{background:var(--chip)}
+.facts a{background-image:linear-gradient(currentColor,currentColor); background-size:0 1px; background-repeat:no-repeat; background-position:0 100%; text-decoration:none; transition:background-size var(--t-base) var(--ease-out)}
+.facts a:hover{background-size:100% 1px}
+/* portrait: slow zoom */
+.portrait img{transition:transform 1.2s var(--ease-out)}
+.portrait:hover img{transform:scale(1.04)}
+/* reel: play breathes, cursor says so */
+.reel{cursor:pointer; transition:transform var(--t-slow) var(--ease-out)}
+.reel:hover .play{transform:scale(1.1)}
+/* stats: numbers re-count on hover (JS) */
+.stat{transition:background-color var(--t-fast) var(--ease); cursor:default}
+.stat:hover{background:var(--chip)}
+/* footer wordmark: outline on hover */
+.giant span{transition:color var(--t-base) var(--ease), -webkit-text-stroke-color var(--t-base) var(--ease); -webkit-text-stroke:0 var(--fg)}
+.foot:hover .giant span{color:transparent; -webkit-text-stroke:2px var(--fg)}
+/* theme toggle */
+.theme svg{transition:transform var(--t-slow) var(--ease-out)}
+.theme:hover svg{transform:rotate(25deg)}
+/* quotes */
+.quote{transition:transform var(--t-slow) var(--ease-out)}
+.quote:hover{transform:translateY(-2px)}
+.quote .avatar{transition:transform var(--t-slow) var(--ease-out)}
+.quote:hover .avatar{transform:scale(1.08)}
+@media (hover:none){ .magnet{translate:0 0} .tilt3d{transform:none} }
+
 /* ── motion ─────────────────────────────────────────── */
 /* scroll reveal: rise + settle, staggered by --i */
 .reveal{
@@ -479,6 +529,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock,.hero-card{opacity:1; transform:none; animation:none; transition:none}
   .hero-card .par{animation:none}
   .hero .copy,.portrait img,.giant span{animation:none}
+  .magnet{translate:0 0} .tilt3d{transform:none}
   *{transition-duration:0ms !important; animation-duration:0ms !important}
 }
 </style>
@@ -591,6 +642,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 
 <!-- FLOATING NAV -->
 <nav class="dock" aria-label="Sections">
+  <span class="ind" aria-hidden="true"></span>
   <button class="round theme" type="button" aria-label="Toggle dark mode" aria-pressed="false">
     <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
     <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
@@ -729,6 +781,51 @@ var STATS=[
   });
 
   [].slice.call(document.querySelectorAll('#facts li')).forEach(function(li,i){ li.classList.add('reveal'); li.style.setProperty('--i', String(i+1)); });
+
+  /* interaction layer */
+  var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce;
+  if(fine){
+    /* magnetic: buttons, dock items, hero cards */
+    [].slice.call(document.querySelectorAll('.btn, .dock a, .dock .round')).forEach(function(el){
+      el.classList.add('magnet');
+      var k=el.classList.contains('hero-card')?0.12:0.25, lim=el.classList.contains('hero-card')?10:6;
+      el.addEventListener('mousemove',function(e){
+        var r=el.getBoundingClientRect(); var dx=(e.clientX-(r.left+r.width/2))*k, dy=(e.clientY-(r.top+r.height/2))*k;
+        dx=Math.max(-lim,Math.min(lim,dx)); dy=Math.max(-lim,Math.min(lim,dy));
+        el.style.setProperty('--mx',dx+'px'); el.style.setProperty('--my',dy+'px');
+      });
+      el.addEventListener('mouseleave',function(){ el.style.setProperty('--mx','0px'); el.style.setProperty('--my','0px'); });
+    });
+    /* 3D tilt: work thumbs, portrait */
+    [].slice.call(document.querySelectorAll('.card .thumb, .portrait')).forEach(function(el){
+      el.classList.add('tilt3d');
+      el.addEventListener('mousemove',function(e){
+        var r=el.getBoundingClientRect(); var px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+        el.style.setProperty('--ry',(px*8)+'deg'); el.style.setProperty('--rx',(-py*8)+'deg');
+      });
+      el.addEventListener('mouseleave',function(){ el.style.setProperty('--rx','0deg'); el.style.setProperty('--ry','0deg'); });
+    });
+    /* stats re-count on hover */
+    [].slice.call(document.querySelectorAll('.stat')).forEach(function(st){
+      var n=st.querySelector('.n'), busy=false;
+      st.addEventListener('mouseenter',function(){ if(busy) return; busy=true; tick(n); setTimeout(function(){ busy=false; },1500); });
+    });
+  }
+  /* dock: gliding highlight follows hover, rests on the active section */
+  var dockEl=document.querySelector('.dock'), ind=dockEl.querySelector('.ind');
+  function moveInd(target){
+    if(!target){ ind.classList.remove('on'); return; }
+    var r=target.getBoundingClientRect(), d=dockEl.getBoundingClientRect();
+    ind.style.left=(r.left-d.left)+'px'; ind.style.width=r.width+'px'; ind.classList.add('on');
+  }
+  function restInd(){ moveInd(dockEl.querySelector('a[aria-current="true"]')); }
+  [].slice.call(dockEl.querySelectorAll('a:not(.cta), .round')).forEach(function(a){
+    a.addEventListener('mouseenter',function(){ moveInd(a); });
+  });
+  dockEl.addEventListener('mouseleave',restInd);
+  new MutationObserver(restInd).observe(dockEl,{attributes:true, subtree:true, attributeFilter:['aria-current']});
+  window.addEventListener('resize',restInd);
+  setTimeout(restInd,1200);
 
   /* giant wordmark: fit the INK of the letters (not the text box) exactly between the outer lines */
   var giant=document.querySelector('.giant'), gs=giant.querySelector('span');
