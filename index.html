@@ -200,8 +200,6 @@ section:first-child{border-top:0}
 .btn.ghost:hover{background:var(--chip); transform:translateY(-1px)}
 .btn:active{transform:scale(.98)}
 .hero .actions{margin-top:clamp(24px,3vw,40px); position:relative; z-index:2}
-.about-cta{padding:var(--blk) var(--cell) 0; display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center}
-.about-cta p{margin:0 var(--s2) 0 0; font-size:15px; color:var(--muted)}
 
 /* booking sheet */
 dialog.booking{width:min(100% - var(--s6)*2, 1040px)}
@@ -323,29 +321,31 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .quote .who span{color:var(--muted)}
 
 /* ── about ──────────────────────────────────────────── */
+/* text column = three stacked cells (intro / facts / call), every rule runs mid-line to outer line */
 .about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch}
-.about-grid > .slot{padding-inline:var(--cell); display:flex; flex-direction:column}
-.about-grid > .slot.text{padding-inline:0}
-.about-grid > .slot.text > .about-copy{display:flex; flex-direction:column; height:100%}
-.about-copy > h3,.about-copy > p{padding-inline:var(--cell)}
-@media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--gap)} .portrait{flex:none; aspect-ratio:1/1} }
+.about-grid > .slot{display:flex; flex-direction:column}
+.about-grid > .slot.photo{padding:var(--blk) var(--cell)}
+.about-grid > .slot.text{padding:0}
+@media (max-width:760px){ .about-grid{grid-template-columns:1fr} .about-grid > .slot.photo{padding-bottom:0} }
 .section-body.split::before{content:""; position:absolute; top:0; bottom:0; left:calc(100% / 3); width:1px; background:var(--line); pointer-events:none}
 @media (max-width:760px){ .section-body.split::before{display:none} }
 .portrait{flex:1; min-height:0; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
 .portrait img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
+@media (max-width:760px){ .portrait{flex:none; aspect-ratio:1/1} }
 
-.about-copy{max-width:none}
-.about-copy h3{margin:0 0 clamp(20px,2.5vw,32px); font-size:clamp(28px,3.4vw,52px); max-width:20ch; font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance}
-.about-copy p{margin:0 0 var(--s4); font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em; max-width:var(--measure)}
+.about-copy{display:flex; flex-direction:column; height:100%}
+.intro{padding:var(--blk) var(--cell)}
+.intro h3{margin:0 0 var(--s5); font-size:clamp(28px,3.4vw,52px); font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance; max-width:20ch}
+.intro p{margin:0; font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em; max-width:var(--measure)}
+.intro p + p{margin-top:var(--s3)}
 .facts{list-style:none; margin:auto 0 0; padding:0; border-top:1px solid var(--line)}
 .facts li{display:grid; grid-template-columns:minmax(120px,1fr) minmax(0,2fr); gap:var(--s4); padding:var(--s4) var(--cell); border-bottom:1px solid var(--line); font-size:16px; overflow-wrap:anywhere}
-.facts li:last-child{border-bottom:0}
-.about-copy{padding-top:0}
-.about-copy > h3{padding-top:0}
 @media (max-width:760px){ .facts li{grid-template-columns:1fr; gap:var(--s1)} }
 .facts .k{color:var(--muted)}
 .facts a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
 .facts a:hover{text-decoration-color:currentColor}
+.about-cta{padding:var(--blk) var(--cell); display:flex; gap:var(--s5); flex-wrap:wrap; align-items:center}
+.about-cta p{margin:0; font-size:clamp(17px,1.25vw,20px); color:var(--muted)}
 
 /* ── socials ────────────────────────────────────────── */
 .socials{border-bottom:1px solid var(--line)}
@@ -596,20 +596,22 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     <div class="section-head">
       <h2 class="reveal">About</h2>
     </div>
-    <div class="section-body split">
+    <div class="section-body split flush">
     <div class="about-grid">
-      <div class="slot"><div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div></div>
-      <div class="slot text"><div class="about-copy reveal">
-        <h3>You have something worth attention. I make sure it gets it.</h3>
-        <p>Strategy, design and video. One person, start to finish.</p>
-        <p>Based in Lisbon, working with the US and the UK.</p>
+      <div class="slot photo"><div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div></div>
+      <div class="slot text"><div class="about-copy">
+        <div class="intro reveal">
+          <h3>You have something worth attention. I make sure it gets it.</h3>
+          <p>Strategy, design and video. One person, start to finish.</p>
+          <p>Based in Lisbon, working with the US and the UK.</p>
+        </div>
         <ul class="facts" id="facts">
           <li><span class="k">Roles</span><span>Creative Director, Strategist, Designer, Video</span></li>
           <li><span class="k">Where</span><span>Lisbon, Portugal (GMT+1)</span></li>
           <li><span class="k">Available</span><span>Q4 2026</span></li>
           <li><span class="k">Email</span><span><a href="mailto:designrobertojr@gmail.com">designrobertojr@gmail.com</a></span></li>
         </ul>
-        <div class="about-cta">
+        <div class="about-cta reveal">
           <p>Got something worth attention?</p>
           <button class="btn primary book" type="button">Book a call</button>
         </div>
