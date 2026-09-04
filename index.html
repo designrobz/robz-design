@@ -80,7 +80,7 @@
   --chip:rgba(5,15,17,.08);
   --focus:var(--ink);
   --grid:rgba(5,15,17,.045);   /* margin texture; the grid lines are .11 */
-  --grid-size:24px;
+  --grid-size:48px;
 
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
 
@@ -274,10 +274,10 @@ section:first-child{border-top:0}
 .about-grid > .slot.text{padding-inline:0}
 .about-grid > .slot.text > .about-copy{display:flex; flex-direction:column; height:100%}
 .about-copy > h3,.about-copy > p{padding-inline:var(--cell)}
-@media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--gap)} }
+@media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--gap)} .portrait{flex:none; aspect-ratio:1/1} }
 .section-body.split::before{content:""; position:absolute; top:0; bottom:0; left:calc(100% / 3); width:1px; background:var(--line); pointer-events:none}
 @media (max-width:760px){ .section-body.split::before{display:none} }
-.portrait{aspect-ratio:1/1; min-height:0; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
+.portrait{flex:1; min-height:0; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
 .portrait img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
 
 .about-copy{max-width:none}
