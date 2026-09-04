@@ -195,9 +195,9 @@ section:first-child{border-top:0}
 }
 .btn svg{width:16px; height:16px}
 .btn.primary{background:var(--fg); color:var(--bg)}
-.btn.primary:hover{opacity:.92}
+.btn.primary:hover{opacity:.9; transform:translateY(-1px)}
 .btn.ghost{border:1px solid var(--line-strong); color:var(--fg)}
-.btn.ghost:hover{background:var(--chip)}
+.btn.ghost:hover{background:var(--chip); transform:translateY(-1px)}
 .btn:active{transform:scale(.98)}
 .hero .actions{margin-top:clamp(24px,3vw,40px); position:relative; z-index:2}
 .about-cta{padding:var(--blk) var(--cell) 0; display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center}
@@ -436,9 +436,6 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .sheet-link svg{width:16px; height:16px}
 
 /* ── interaction: everything you can touch answers back ── */
-/* magnetic pull (JS sets --mx/--my) */
-.magnet{translate:var(--mx,0) var(--my,0); transition:translate var(--t-base) var(--ease-out)}
-.magnet:hover{transition-duration:var(--t-fast)}
 /* arrows slide */
 .btn svg,.dock .cta svg,.sheet-link svg{transition:transform var(--t-base) var(--ease-out)}
 .btn:hover svg,.dock .cta:hover svg,.sheet-link:hover svg{transform:translateX(3px)}
@@ -472,9 +469,6 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 /* stats: numbers re-count on hover (JS) */
 .stat{transition:background-color var(--t-fast) var(--ease); cursor:default}
 .stat:hover{background:var(--chip)}
-/* footer wordmark: outline on hover */
-.giant span{transition:color var(--t-base) var(--ease), -webkit-text-stroke-color var(--t-base) var(--ease); -webkit-text-stroke:0 var(--fg)}
-.foot:hover .giant span{color:transparent; -webkit-text-stroke:2px var(--fg)}
 /* theme toggle */
 .theme svg{transition:transform var(--t-slow) var(--ease-out)}
 .theme:hover svg{transform:rotate(25deg)}
@@ -483,7 +477,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .quote:hover{transform:translateY(-2px)}
 .quote .avatar{transition:transform var(--t-slow) var(--ease-out)}
 .quote:hover .avatar{transform:scale(1.08)}
-@media (hover:none){ .magnet{translate:0 0} .tilt3d{transform:none} }
+@media (hover:none){ .tilt3d{transform:none} }
 
 /* ── motion ─────────────────────────────────────────── */
 /* scroll reveal: rise + settle, staggered by --i */
@@ -529,7 +523,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock,.hero-card{opacity:1; transform:none; animation:none; transition:none}
   .hero-card .par{animation:none}
   .hero .copy,.portrait img,.giant span{animation:none}
-  .magnet{translate:0 0} .tilt3d{transform:none}
+  .tilt3d{transform:none}
   *{transition-duration:0ms !important; animation-duration:0ms !important}
 }
 </style>
@@ -785,17 +779,6 @@ var STATS=[
   /* interaction layer */
   var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce;
   if(fine){
-    /* magnetic: buttons, dock items, hero cards */
-    [].slice.call(document.querySelectorAll('.btn, .dock a, .dock .round')).forEach(function(el){
-      el.classList.add('magnet');
-      var k=el.classList.contains('hero-card')?0.12:0.25, lim=el.classList.contains('hero-card')?10:6;
-      el.addEventListener('mousemove',function(e){
-        var r=el.getBoundingClientRect(); var dx=(e.clientX-(r.left+r.width/2))*k, dy=(e.clientY-(r.top+r.height/2))*k;
-        dx=Math.max(-lim,Math.min(lim,dx)); dy=Math.max(-lim,Math.min(lim,dy));
-        el.style.setProperty('--mx',dx+'px'); el.style.setProperty('--my',dy+'px');
-      });
-      el.addEventListener('mouseleave',function(){ el.style.setProperty('--mx','0px'); el.style.setProperty('--my','0px'); });
-    });
     /* 3D tilt: work thumbs, portrait */
     [].slice.call(document.querySelectorAll('.card .thumb, .portrait')).forEach(function(el){
       el.classList.add('tilt3d');
