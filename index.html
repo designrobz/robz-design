@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://robz.design/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Roberto Junior">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <meta name="theme-color" content="#b7e7fc" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#050f11" media="(prefers-color-scheme: dark)">
 
@@ -88,7 +88,7 @@
   --gutter:clamp(20px,9vw,200px);
   --col-max:1560px;
   --measure:56ch;
-  --cell:clamp(0px,3vw,48px);
+  --cell:clamp(16px,3vw,48px);
 
   --ease:cubic-bezier(.2,.7,.2,1);
   --t-fast:160ms; --t-base:280ms; --t-slow:560ms;
@@ -101,16 +101,6 @@
   --glass:rgba(5,15,17,.72); --chip:rgba(183,231,252,.1);
   --focus:var(--sky);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:var(--ink); --fg:var(--sky);
-    --line:rgba(183,231,252,.1); --line-strong:rgba(183,231,252,.28);
-    --muted:rgba(183,231,252,.6);
-    --surface:var(--sky); --on-surface:var(--ink);
-    --glass:rgba(5,15,17,.72); --chip:rgba(183,231,252,.1);
-    --focus:var(--sky);
-  }
-}
 
 /* ── base ───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
@@ -120,7 +110,6 @@ body{
   margin:0; background:var(--bg); color:var(--fg);
   font-family:var(--font); font-size:17px; line-height:1.45;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
-  padding-bottom:calc(96px + env(safe-area-inset-bottom));
   transition:background-color var(--t-base) var(--ease), color var(--t-base) var(--ease);
 }
 body.locked{overflow:hidden}
@@ -132,13 +121,13 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
 
 .frame{width:min(100% - var(--gutter)*2, var(--col-max)); margin-inline:auto}
 
-/* the grid: three columns, always present, content sits inside the cells */
-.lines{position:fixed; inset:0; pointer-events:none; z-index:0}
-.lines .frame{height:100%; border-inline:1px solid var(--line); position:relative}
-.lines .frame::before,.lines .frame::after{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line)}
-.lines .frame::before{left:calc(100% / 3)}
-.lines .frame::after{left:calc(100% / 3 * 2)}
-@media (max-width:1100px){ .lines .frame::before,.lines .frame::after{display:none} }
+/* the grid: each section carries its own columns; content never touches a line */
+.ruled{position:relative; border-inline:1px solid var(--line)}
+.ruled::before,.ruled::after{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line); pointer-events:none}
+.ruled::before{left:calc(100% / 3)} .ruled::after{left:calc(100% / 3 * 2)}
+.ruled.cols-1::before,.ruled.cols-1::after{display:none}
+@media (max-width:1100px){ .work-section::before{left:50%} .work-section::after{display:none} }
+@media (max-width:760px){ .work-section::before,.socials-section::before,.socials-section::after{display:none} }
 main{position:relative; z-index:1}
 .cell-pad{padding-inline:var(--cell)}
 
@@ -146,10 +135,7 @@ main{position:relative; z-index:1}
 .wordmark{display:inline-flex; align-items:flex-start; gap:.06em; font-weight:700; letter-spacing:-.035em; line-height:1}
 .wordmark sup{font-size:.28em; line-height:1; margin-top:.12em; letter-spacing:0}
 
-/* ── top corner controls ────────────────────────────── */
-.corner{
-  position:fixed; top:var(--s5); right:var(--s5); z-index:20;
-}
+/* ── round buttons ──────────────────────────────────── */
 .round{
   width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
   background:var(--glass); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
@@ -162,10 +148,6 @@ main{position:relative; z-index:1}
 .theme .moon{display:none}
 :root[data-theme="dark"] .theme .sun{display:none}
 :root[data-theme="dark"] .theme .moon{display:block}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .theme .sun{display:none}
-  :root:not([data-theme="light"]) .theme .moon{display:block}
-}
 
 /* ── sections ───────────────────────────────────────── */
 section{padding-block:var(--s10); border-top:1px solid var(--line)}
@@ -185,10 +167,10 @@ section:first-child{border-top:0}
 .hero{padding-top:var(--s7); padding-bottom:var(--s9); min-height:100svh; display:flex; flex-direction:column}
 @media (max-width:760px){ .hero{padding-bottom:var(--s7); min-height:auto} .hero .copy{padding-block:var(--s8)} }
 .hero .brand{display:flex; justify-content:center; font-size:32px}
-.hero .copy{text-align:center; margin-block:auto; padding-block:var(--s9)}
+.hero .copy{text-align:center; margin-block:auto; padding:var(--s9) var(--cell)}
 .hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
 .hero p{margin:var(--s6) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
-.reel{position:relative; aspect-ratio:21/9; border-radius:var(--r-l); overflow:hidden; background:var(--surface); color:var(--on-surface)}
+.reel{position:relative; margin-inline:var(--cell); aspect-ratio:21/9; border-radius:var(--r-l); overflow:hidden; background:var(--surface); color:var(--on-surface)}
 @media (max-width:760px){ .reel{aspect-ratio:4/3; border-radius:var(--r-m)} }
 .reel video{width:100%; height:100%; object-fit:cover}
 .reel .label{position:absolute; left:var(--s5); bottom:var(--s5); display:flex; align-items:center; gap:var(--s3); font-size:15px; font-weight:500}
@@ -203,7 +185,7 @@ section:first-child{border-top:0}
 /* ── work ───────────────────────────────────────────── */
 .work-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--s8)}
 .work-grid .card{padding-inline:var(--cell)}
-@media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:var(--s6); row-gap:var(--s7)} .work-grid .card{padding-inline:0} }
+@media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:var(--s7)} }
 @media (max-width:760px){ .work-grid{grid-template-columns:1fr; row-gap:var(--s6)} }
 .card{display:block; text-align:left; width:100%; color:inherit}
 .card .thumb{
@@ -219,12 +201,13 @@ section:first-child{border-top:0}
 .card .year{font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0}
 
 /* ── about ──────────────────────────────────────────── */
-.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:start}
+.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:stretch}
 .about-grid > *{padding-inline:var(--cell)}
-@media (max-width:1100px){ .about-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr); column-gap:var(--s6)} .about-grid > *{padding-inline:0} }
+@media (max-width:1100px){ .about-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)} }
 @media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--s5)} }
-.portrait{aspect-ratio:4/5; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
-.portrait img{width:100%; height:100%; object-fit:cover}
+.portrait{height:100%; min-height:420px; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
+.portrait img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
+@media (max-width:760px){ .portrait{height:auto; min-height:0; aspect-ratio:4/5} }
 .about-copy{max-width:var(--measure)}
 .about-copy h3{margin:0 0 var(--s6); font-size:clamp(28px,3.2vw,48px); font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance}
 .about-copy p{margin:0 0 var(--s4); font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em}
@@ -235,7 +218,7 @@ section:first-child{border-top:0}
 .facts a:hover{text-decoration-color:currentColor}
 
 /* ── socials ────────────────────────────────────────── */
-.socials{padding-bottom:0}
+.socials{padding-bottom:0; border-bottom:1px solid var(--line)}
 .cells{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-block:1px solid var(--line)}
 @media (max-width:760px){ .cells{grid-template-columns:1fr} }
 .cell{
@@ -249,15 +232,16 @@ section:first-child{border-top:0}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
-  width:100vw; margin:var(--s9) calc(50% - 50vw) 0; overflow:hidden; height:.6em; line-height:1;
+  width:100vw; margin:0; padding-top:var(--s9); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
   font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
 }
 .giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
-@media (max-width:760px){ .giant{margin-top:var(--s7)} }
+@media (max-width:760px){ .giant{padding-top:var(--s7)} }
 
 /* ── floating capsule nav ───────────────────────────── */
 .dock{
   position:fixed; left:50%; bottom:calc(var(--s5) + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:20;
+  transition:transform var(--t-slow) var(--ease), opacity var(--t-slow) var(--ease);
   display:flex; align-items:center; gap:var(--s1); padding:6px;
   background:var(--glass); -webkit-backdrop-filter:saturate(1.5) blur(20px); backdrop-filter:saturate(1.5) blur(20px);
   border:1px solid var(--line); border-radius:999px;
@@ -268,6 +252,9 @@ section:first-child{border-top:0}
   font-size:16px; font-weight:500; letter-spacing:-.01em; color:var(--muted);
   transition:background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
+.dock.away{transform:translate(-50%, 160%); opacity:0; pointer-events:none}
+.dock .round{width:44px; height:44px; border:0; background:transparent; -webkit-backdrop-filter:none; backdrop-filter:none; color:var(--muted)}
+.dock .round:hover{background:var(--chip); color:var(--fg)}
 .dock a:hover{color:var(--fg)}
 .dock a[aria-current="true"]{background:var(--chip); color:var(--fg); font-weight:600}
 .dock .cta{background:var(--fg); color:var(--bg); font-weight:600; gap:8px; padding-right:14px}
@@ -275,7 +262,8 @@ section:first-child{border-top:0}
 .dock .cta svg{width:16px; height:16px}
 @media (max-width:760px){
   .dock{bottom:calc(var(--s4) + env(safe-area-inset-bottom)); padding:5px}
-  .dock a{height:42px; padding:0 14px; font-size:15px}
+  .dock a{height:42px; padding:0 12px; font-size:15px}
+  .dock .round{width:42px; height:42px}
 }
 
 /* ── project sheet (dialog) ─────────────────────────── */
@@ -319,18 +307,9 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
 </head>
 <body>
 
-<div class="corner">
-  <button class="round theme" type="button" aria-label="Toggle dark mode" aria-pressed="false">
-    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
-    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
-  </button>
-</div>
-
-<div class="lines" aria-hidden="true"><div class="frame"></div></div>
-
 <main>
-  <!-- HERO -->
-  <section class="hero frame" id="top">
+  <!-- HERO: outer lines only -->
+  <section class="hero frame ruled cols-1" id="top">
     <a class="brand" href="#top" aria-label="Robz, home"><span class="wordmark">Robz<sup>®</sup></span></a>
     <div class="copy">
       <h1>Creative Partner</h1>
@@ -345,7 +324,7 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   </section>
 
   <!-- WORK -->
-  <section class="frame" id="work">
+  <section class="frame ruled work-section" id="work">
     <div class="section-head cell-pad">
       <h2>Work</h2>
       <p>What it looked like, and what it did.</p>
@@ -354,7 +333,7 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   </section>
 
   <!-- ABOUT -->
-  <section class="frame" id="about">
+  <section class="frame ruled cols-1" id="about">
     <div class="section-head cell-pad">
       <h2>About</h2>
       <p>Short version.</p>
@@ -376,7 +355,7 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   </section>
 
   <!-- SOCIALS -->
-  <section class="socials frame" id="socials">
+  <section class="socials frame ruled socials-section" id="socials">
     <div class="section-head cell-pad">
       <h2>Socials</h2>
       <p>Say hi.</p>
@@ -386,12 +365,16 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
       <a class="cell" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
       <a class="cell" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
     </div>
-    <div class="giant" aria-hidden="true"><span>Robz</span></div>
   </section>
+  <div class="giant" aria-hidden="true"><span>Robz</span></div>
 </main>
 
 <!-- FLOATING NAV -->
 <nav class="dock" aria-label="Sections">
+  <button class="round theme" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+  </button>
   <a href="#work">work</a>
   <a href="#about">about</a>
   <a href="#socials">socials</a>
@@ -439,18 +422,16 @@ var PROJECTS=[
 
   /* theme */
   var btn=document.querySelector('.theme');
-  var mq=window.matchMedia('(prefers-color-scheme: dark)');
-  function current(){ var t=root.getAttribute('data-theme'); return t? t : (mq.matches?'dark':'light'); }
+  function current(){ return root.getAttribute('data-theme')==='dark'?'dark':'light'; }
   function sync(){ btn.setAttribute('aria-pressed', current()==='dark'?'true':'false'); }
-  try{ var saved=localStorage.getItem('robz-theme'); if(saved) root.setAttribute('data-theme',saved); }catch(e){}
+  try{ if(localStorage.getItem('robz-theme')==='dark') root.setAttribute('data-theme','dark'); }catch(e){}
   sync();
   btn.addEventListener('click',function(){
     var next=current()==='dark'?'light':'dark';
-    root.setAttribute('data-theme',next);
+    if(next==='dark') root.setAttribute('data-theme','dark'); else root.removeAttribute('data-theme');
     try{ localStorage.setItem('robz-theme',next); }catch(e){}
     sync();
   });
-  mq.addEventListener('change',sync);
 
   /* work: cards */
   var grid=document.getElementById('grid');
@@ -520,6 +501,11 @@ var PROJECTS=[
       entries.forEach(function(e){ if(e.isIntersecting) setActive(e.target.id); });
     },{rootMargin:'-40% 0px -50% 0px'});
     sections.forEach(function(s){ if(s) so.observe(s); });
+    var dock=document.querySelector('.dock');
+    var go=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ dock.classList.toggle('away', e.isIntersecting); });
+    },{threshold:.35});
+    go.observe(giant);
     var ro=new IntersectionObserver(function(entries){
       entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
     },{rootMargin:'0px 0px -8% 0px'});
