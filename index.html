@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Robz® — Creative Partner for Founders and Brands</title>
+<meta name="description" content="Roberto Junior, creative partner in Lisbon. Strategy, design and video for founders and brands that want to be seen, remembered and chosen.">
+<link rel="canonical" href="https://robz.design/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Roberto Junior">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#b7e7fc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#050f11" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Robz">
+<meta property="og:title" content="Robz® — Creative Partner for Founders and Brands">
+<meta property="og:description" content="Strategy, design and video for founders and brands that want to be seen, remembered and chosen.">
+<meta property="og:url" content="https://robz.design/">
+<meta property="og:image" content="https://robz.design/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Robz wordmark on light blue">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Robz® — Creative Partner for Founders and Brands">
+<meta name="twitter:description" content="Strategy, design and video for founders and brands that want to be seen, remembered and chosen.">
+<meta name="twitter:image" content="https://robz.design/og.png">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"Person",
+      "@id":"https://robz.design/#roberto",
+      "name":"Roberto Junior",
+      "alternateName":"Robz",
+      "url":"https://robz.design/",
+      "image":"https://robz.design/assets/roberto.jpg",
+      "email":"mailto:designrobertojr@gmail.com",
+      "jobTitle":"Creative Partner",
+      "description":"Strategy, design and video for founders and brands.",
+      "knowsAbout":["Creative direction","Brand strategy","YouTube thumbnails","Video editing","Design"],
+      "address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},
+      "sameAs":[
+        "https://www.linkedin.com/in/roberto-junior-48630a33a",
+        "https://ytjobs.co/talent/profile/26593"
+      ]
+    },
+    {
+      "@type":"WebSite",
+      "@id":"https://robz.design/#site",
+      "url":"https://robz.design/",
+      "name":"Robz",
+      "inLanguage":"en",
+      "publisher":{"@id":"https://robz.design/#roberto"}
+    }
+  ]
+}
+</script>
+<style>
+/* ── tokens ─────────────────────────────────────────── */
+:root{
+  --ink:#050f11;
+  --sky:#b7e7fc;
+  --bg:var(--sky);
+  --fg:var(--ink);
+  --line:rgba(5,15,17,.11);
+  --line-strong:rgba(5,15,17,.3);
+  --muted:rgba(5,15,17,.6);
+  --surface:var(--ink);
+  --on-surface:var(--sky);
+  --glass:rgba(183,231,252,.72);
+  --chip:rgba(5,15,17,.08);
+  --focus:var(--ink);
+
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:128px; --s11:192px;
+
+  --r-s:12px; --r-m:18px; --r-l:28px;
+  --gutter:clamp(20px,9vw,200px);
+  --col-max:1560px;
+  --measure:56ch;
+  --cell:clamp(0px,3vw,48px);
+
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --t-fast:160ms; --t-base:280ms; --t-slow:560ms;
+}
+:root[data-theme="dark"]{
+  --bg:var(--ink); --fg:var(--sky);
+  --line:rgba(183,231,252,.1); --line-strong:rgba(183,231,252,.28);
+  --muted:rgba(183,231,252,.6);
+  --surface:var(--sky); --on-surface:var(--ink);
+  --glass:rgba(5,15,17,.72); --chip:rgba(183,231,252,.1);
+  --focus:var(--sky);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:var(--ink); --fg:var(--sky);
+    --line:rgba(183,231,252,.1); --line-strong:rgba(183,231,252,.28);
+    --muted:rgba(183,231,252,.6);
+    --surface:var(--sky); --on-surface:var(--ink);
+    --glass:rgba(5,15,17,.72); --chip:rgba(183,231,252,.1);
+    --focus:var(--sky);
+  }
+}
+
+/* ── base ───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:var(--s6)}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--font); font-size:17px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+  transition:background-color var(--t-base) var(--ease), color var(--t-base) var(--ease);
+}
+body.locked{overflow:hidden}
+a{color:inherit; text-decoration:none}
+img,video{display:block; max-width:100%}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer}
+:focus-visible{outline:2px solid var(--focus); outline-offset:4px; border-radius:6px}
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+.frame{width:min(100% - var(--gutter)*2, var(--col-max)); margin-inline:auto}
+
+/* the grid: three columns, always present, content sits inside the cells */
+.lines{position:fixed; inset:0; pointer-events:none; z-index:0}
+.lines .frame{height:100%; border-inline:1px solid var(--line); position:relative}
+.lines .frame::before,.lines .frame::after{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line)}
+.lines .frame::before{left:calc(100% / 3)}
+.lines .frame::after{left:calc(100% / 3 * 2)}
+@media (max-width:1100px){ .lines .frame::before,.lines .frame::after{display:none} }
+main{position:relative; z-index:1}
+.cell-pad{padding-inline:var(--cell)}
+
+/* ── wordmark ───────────────────────────────────────── */
+.wordmark{display:inline-flex; align-items:flex-start; gap:.06em; font-weight:700; letter-spacing:-.035em; line-height:1}
+.wordmark sup{font-size:.28em; line-height:1; margin-top:.12em; letter-spacing:0}
+
+/* ── top corner controls ────────────────────────────── */
+.corner{
+  position:fixed; top:var(--s5); right:var(--s5); z-index:20;
+}
+.round{
+  width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
+  background:var(--glass); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  border:1px solid var(--line);
+  transition:background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.round:hover{background:var(--fg); color:var(--bg)}
+.round:active{transform:scale(.96)}
+.round svg{width:20px; height:20px}
+.theme .moon{display:none}
+:root[data-theme="dark"] .theme .sun{display:none}
+:root[data-theme="dark"] .theme .moon{display:block}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .theme .sun{display:none}
+  :root:not([data-theme="light"]) .theme .moon{display:block}
+}
+
+/* ── sections ───────────────────────────────────────── */
+section{padding-block:var(--s10); border-top:1px solid var(--line)}
+section:not(.hero){content-visibility:auto; contain-intrinsic-size:auto 900px}
+section:first-child{border-top:0}
+@media (max-width:760px){ section{padding-block:var(--s7)} }
+.section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s5); margin-bottom:var(--s8)}
+.section-head h2{
+  margin:0; font-size:clamp(36px,4.2vw,60px); font-weight:700; letter-spacing:-.035em; line-height:1;
+}
+.section-head p{margin:0; font-size:clamp(16px,1.2vw,19px); color:var(--muted); max-width:34ch; text-wrap:balance}
+@media (max-width:760px){
+  .section-head{flex-direction:column; align-items:flex-start; gap:var(--s2); margin-bottom:var(--s5)}
+}
+
+/* ── hero ───────────────────────────────────────────── */
+.hero{padding-top:var(--s7); padding-bottom:var(--s9); min-height:100svh; display:flex; flex-direction:column}
+@media (max-width:760px){ .hero{padding-bottom:var(--s7); min-height:auto} .hero .copy{padding-block:var(--s8)} }
+.hero .brand{display:flex; justify-content:center; font-size:32px}
+.hero .copy{text-align:center; margin-block:auto; padding-block:var(--s9)}
+.hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
+.hero p{margin:var(--s6) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
+.reel{position:relative; aspect-ratio:21/9; border-radius:var(--r-l); overflow:hidden; background:var(--surface); color:var(--on-surface)}
+@media (max-width:760px){ .reel{aspect-ratio:4/3; border-radius:var(--r-m)} }
+.reel video{width:100%; height:100%; object-fit:cover}
+.reel .label{position:absolute; left:var(--s5); bottom:var(--s5); display:flex; align-items:center; gap:var(--s3); font-size:15px; font-weight:500}
+.reel .label .dot{width:8px; height:8px; border-radius:50%; background:currentColor; opacity:.6}
+.reel .play{
+  position:absolute; inset:0; margin:auto; width:76px; height:76px; border-radius:50%; display:grid; place-items:center;
+  background:var(--on-surface); color:var(--surface); transition:transform var(--t-base) var(--ease);
+}
+.reel .play:hover{transform:scale(1.06)}
+.reel .play svg{width:22px; height:22px; margin-left:3px}
+
+/* ── work ───────────────────────────────────────────── */
+.work-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--s8)}
+.work-grid .card{padding-inline:var(--cell)}
+@media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:var(--s6); row-gap:var(--s7)} .work-grid .card{padding-inline:0} }
+@media (max-width:760px){ .work-grid{grid-template-columns:1fr; row-gap:var(--s6)} }
+.card{display:block; text-align:left; width:100%; color:inherit}
+.card .thumb{
+  aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden; background:var(--surface); color:var(--on-surface);
+  display:grid; place-items:center; transition:transform var(--t-base) var(--ease);
+}
+.card .thumb img{width:100%; height:100%; object-fit:cover}
+.card .thumb span{font-size:13px; font-weight:500; opacity:.5}
+.card:hover .thumb{transform:translateY(-3px)}
+.card .meta{display:flex; justify-content:space-between; gap:var(--s4); margin-top:var(--s4)}
+.card h3{margin:0; font-size:18px; font-weight:600; letter-spacing:-.014em}
+.card .role{margin:var(--s1) 0 0; font-size:15px; color:var(--muted)}
+.card .year{font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0}
+
+/* ── about ──────────────────────────────────────────── */
+.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:start}
+.about-grid > *{padding-inline:var(--cell)}
+@media (max-width:1100px){ .about-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr); column-gap:var(--s6)} .about-grid > *{padding-inline:0} }
+@media (max-width:760px){ .about-grid{grid-template-columns:1fr; row-gap:var(--s5)} }
+.portrait{aspect-ratio:4/5; border-radius:var(--r-m); overflow:hidden; background:var(--surface)}
+.portrait img{width:100%; height:100%; object-fit:cover}
+.about-copy{max-width:var(--measure)}
+.about-copy h3{margin:0 0 var(--s6); font-size:clamp(28px,3.2vw,48px); font-weight:700; letter-spacing:-.03em; line-height:1.05; text-wrap:balance}
+.about-copy p{margin:0 0 var(--s4); font-size:clamp(18px,1.35vw,22px); line-height:1.4; letter-spacing:-.01em}
+.facts{list-style:none; margin:var(--s8) 0 0; padding:0; border-top:1px solid var(--line)}
+.facts li{display:grid; grid-template-columns:minmax(120px,1fr) minmax(0,2fr); gap:var(--s4); padding:var(--s4) 0; border-bottom:1px solid var(--line); font-size:16px}
+.facts .k{color:var(--muted)}
+.facts a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
+.facts a:hover{text-decoration-color:currentColor}
+
+/* ── socials ────────────────────────────────────────── */
+.socials{padding-bottom:0}
+.cells{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-block:1px solid var(--line)}
+@media (max-width:760px){ .cells{grid-template-columns:1fr} }
+.cell{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--s3);
+  padding:clamp(56px,9vw,140px) var(--s4); border-right:1px solid var(--line);
+  transition:background-color var(--t-base) var(--ease), color var(--t-base) var(--ease);
+}
+.cell:last-child{border-right:0}
+@media (max-width:760px){ .cell{border-right:0; border-bottom:1px solid var(--line)} .cell:last-child{border-bottom:0} }
+.cell:hover,.cell:focus-visible{background:var(--surface); color:var(--on-surface); outline-offset:-4px}
+.cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
+.cell .name{font-size:15px; font-weight:500; opacity:.7}
+.giant{
+  width:100vw; margin:var(--s9) calc(50% - 50vw) 0; overflow:hidden; height:.6em; line-height:1;
+  font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
+}
+.giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
+@media (max-width:760px){ .giant{margin-top:var(--s7)} }
+
+/* ── floating capsule nav ───────────────────────────── */
+.dock{
+  position:fixed; left:50%; bottom:calc(var(--s5) + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:20;
+  display:flex; align-items:center; gap:var(--s1); padding:6px;
+  background:var(--glass); -webkit-backdrop-filter:saturate(1.5) blur(20px); backdrop-filter:saturate(1.5) blur(20px);
+  border:1px solid var(--line); border-radius:999px;
+  box-shadow:0 1px 2px rgba(5,15,17,.06), 0 12px 40px -12px rgba(5,15,17,.28);
+}
+.dock a{
+  display:inline-flex; align-items:center; height:44px; padding:0 18px; border-radius:999px;
+  font-size:16px; font-weight:500; letter-spacing:-.01em; color:var(--muted);
+  transition:background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.dock a:hover{color:var(--fg)}
+.dock a[aria-current="true"]{background:var(--chip); color:var(--fg); font-weight:600}
+.dock .cta{background:var(--fg); color:var(--bg); font-weight:600; gap:8px; padding-right:14px}
+.dock .cta:hover{color:var(--bg); opacity:.92}
+.dock .cta svg{width:16px; height:16px}
+@media (max-width:760px){
+  .dock{bottom:calc(var(--s4) + env(safe-area-inset-bottom)); padding:5px}
+  .dock a{height:42px; padding:0 14px; font-size:15px}
+}
+
+/* ── project sheet (dialog) ─────────────────────────── */
+dialog.sheet{
+  width:min(100% - var(--s6)*2, 1120px); max-height:min(92svh, 1100px); margin:auto; padding:0;
+  border:0; border-radius:var(--r-l); background:var(--bg); color:var(--fg); overflow:hidden;
+  box-shadow:0 40px 120px -30px rgba(0,0,0,.5);
+}
+dialog.sheet::backdrop{background:rgba(5,15,17,.55); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px)}
+dialog.sheet[open]{animation:sheet-in var(--t-slow) var(--ease)}
+dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
+@keyframes fade{from{opacity:0} to{opacity:1}}
+@keyframes sheet-in{from{opacity:0; transform:translateY(24px) scale(.985)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){ dialog.sheet[open]{animation:none} }
+.sheet-scroll{max-height:min(92svh,1100px); overflow:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch}
+.sheet-close{position:absolute; top:var(--s4); right:var(--s4); z-index:2}
+.sheet-body{padding:clamp(24px,4vw,56px)}
+.sheet-head{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:var(--s6); margin-bottom:var(--s6)}
+@media (max-width:760px){ .sheet-head{grid-template-columns:1fr; gap:var(--s4)} }
+.sheet-head h2{margin:0; font-size:clamp(32px,4vw,56px); font-weight:700; letter-spacing:-.035em; line-height:1}
+.sheet-head .meta{list-style:none; margin:0; padding:0; font-size:15px; color:var(--muted)}
+.sheet-head .meta li{display:flex; justify-content:space-between; gap:var(--s4); padding:var(--s2) 0; border-bottom:1px solid var(--line)}
+.sheet-head .meta li span:last-child{color:var(--fg); text-align:right}
+.sheet-outcome{margin:0 0 var(--s6); max-width:var(--measure); font-size:clamp(19px,1.6vw,26px); line-height:1.3; letter-spacing:-.014em; text-wrap:balance}
+.sheet-media{display:grid; gap:var(--s4)}
+.sheet-media .m{aspect-ratio:16/9; border-radius:var(--r-s); background:var(--surface); color:var(--on-surface); display:grid; place-items:center; overflow:hidden}
+.sheet-media .m img{width:100%; height:100%; object-fit:cover}
+.sheet-media .m span{font-size:13px; opacity:.5}
+.sheet-media .m.half{aspect-ratio:4/3}
+.sheet-media .row{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
+@media (max-width:760px){ .sheet-media .row{grid-template-columns:1fr} }
+.sheet-link{display:inline-flex; align-items:center; gap:8px; margin-top:var(--s6); font-weight:600; text-decoration:underline; text-underline-offset:4px; text-decoration-color:var(--line-strong)}
+.sheet-link:hover{text-decoration-color:currentColor}
+.sheet-link svg{width:16px; height:16px}
+
+/* ── reveal ─────────────────────────────────────────── */
+.reveal{opacity:0; transform:translateY(14px); transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease)}
+.reveal.in{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none} *{transition-duration:0ms !important; animation-duration:0ms !important} }
+</style>
+</head>
+<body>
+
+<div class="corner">
+  <button class="round theme" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+  </button>
+</div>
+
+<div class="lines" aria-hidden="true"><div class="frame"></div></div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero frame" id="top">
+    <a class="brand" href="#top" aria-label="Robz, home"><span class="wordmark">Robz<sup>®</sup></span></a>
+    <div class="copy">
+      <h1>Creative Partner</h1>
+      <p>For founders and brands that want to be seen, remembered and chosen.</p>
+    </div>
+    <div class="reel reveal">
+      <button class="play" type="button" aria-label="Play showreel">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+      </button>
+      <div class="label"><span class="dot"></span>Showreel 2026</div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="frame" id="work">
+    <div class="section-head cell-pad">
+      <h2>Work</h2>
+      <p>What it looked like, and what it did.</p>
+    </div>
+    <div class="work-grid" id="grid"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="frame" id="about">
+    <div class="section-head cell-pad">
+      <h2>About</h2>
+      <p>Short version.</p>
+    </div>
+    <div class="about-grid">
+      <div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div>
+      <div class="about-copy reveal">
+        <h3>You have something worth attention. I make sure it gets it.</h3>
+        <p>Strategy, design and video. One person, start to finish.</p>
+        <p>Based in Lisbon, working with the US and the UK.</p>
+        <ul class="facts">
+          <li><span class="k">Roles</span><span>Creative Director, Strategist, Designer, Video</span></li>
+          <li><span class="k">Where</span><span>Lisbon, Portugal (GMT+1)</span></li>
+          <li><span class="k">Available</span><span>Q4 2026</span></li>
+          <li><span class="k">Email</span><span><a href="mailto:designrobertojr@gmail.com">designrobertojr@gmail.com</a></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIALS -->
+  <section class="socials frame" id="socials">
+    <div class="section-head cell-pad">
+      <h2>Socials</h2>
+      <p>Say hi.</p>
+    </div>
+    <div class="cells">
+      <a class="cell" href="https://www.linkedin.com/in/roberto-junior-48630a33a" target="_blank" rel="noopener"><span class="glyph">in</span><span class="name">LinkedIn</span></a>
+      <a class="cell" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
+      <a class="cell" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
+    </div>
+    <div class="giant" aria-hidden="true"><span>Robz</span></div>
+  </section>
+</main>
+
+<!-- FLOATING NAV -->
+<nav class="dock" aria-label="Sections">
+  <a href="#work">work</a>
+  <a href="#about">about</a>
+  <a href="#socials">socials</a>
+  <a class="cta" href="mailto:designrobertojr@gmail.com">email
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</nav>
+
+<!-- PROJECT SHEET -->
+<dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+  <div class="sheet-scroll">
+    <button class="round sheet-close" type="button" aria-label="Close" id="sheet-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="sheet-body">
+      <div class="sheet-head">
+        <h2 id="sheet-title"></h2>
+        <ul class="meta" id="sheet-meta"></ul>
+      </div>
+      <p class="sheet-outcome" id="sheet-outcome"></p>
+      <div class="sheet-media" id="sheet-media"></div>
+      <a class="sheet-link" id="sheet-link" href="#" target="_blank" rel="noopener" hidden>Open the live piece
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* ── data: edit here ──────────────────────────────────
+   Every card opens the popup. thumb: path to a 16:9 image.
+   href (optional): link to the live piece, shown inside the popup.
+*/
+var PROJECTS=[
+  {id:'p1',title:'Project one',role:'Thumbnails',client:'Client',year:'2026',outcome:'One line on what changed for the client. A number if there is one.',media:3,href:'',thumb:''},
+  {id:'p2',title:'Project two',role:'Thumbnails',client:'Client',year:'2026',outcome:'One line on what changed for the client.',media:3,href:'',thumb:''},
+  {id:'p3',title:'Project three',role:'Thumbnails',client:'Client',year:'2026',outcome:'One line on what changed for the client.',media:2,href:'',thumb:''},
+  {id:'p4',title:'Project four',role:'Thumbnails',client:'Client',year:'2025',outcome:'One line on what changed for the client.',media:3,href:'',thumb:''},
+  {id:'p5',title:'Project five',role:'Thumbnails',client:'Client',year:'2025',outcome:'One line on what changed for the client.',media:2,href:'',thumb:''},
+  {id:'p6',title:'Project six',role:'Thumbnails',client:'Client',year:'2025',outcome:'One line on what changed for the client.',media:3,href:'',thumb:''}
+];
+
+(function(){
+  var root=document.documentElement;
+
+  /* theme */
+  var btn=document.querySelector('.theme');
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function current(){ var t=root.getAttribute('data-theme'); return t? t : (mq.matches?'dark':'light'); }
+  function sync(){ btn.setAttribute('aria-pressed', current()==='dark'?'true':'false'); }
+  try{ var saved=localStorage.getItem('robz-theme'); if(saved) root.setAttribute('data-theme',saved); }catch(e){}
+  sync();
+  btn.addEventListener('click',function(){
+    var next=current()==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{ localStorage.setItem('robz-theme',next); }catch(e){}
+    sync();
+  });
+  mq.addEventListener('change',sync);
+
+  /* work: cards */
+  var grid=document.getElementById('grid');
+  PROJECTS.forEach(function(p){
+    var el=document.createElement('button');
+    el.className='card reveal'; el.type='button'; el.dataset.id=p.id; el.setAttribute('aria-haspopup','dialog');
+    el.innerHTML='<div class="thumb">'+(p.thumb? '<img src="'+p.thumb+'" alt="'+p.title+'" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+
+      '<div class="meta"><div><h3>'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
+    el.addEventListener('click',function(){ openSheet(p, el); });
+    grid.appendChild(el);
+  });
+
+  /* giant wordmark: fit to the full viewport width, no distortion */
+  var giant=document.querySelector('.giant'), gs=giant.querySelector('span');
+  function fitGiant(){
+    gs.style.fontSize='100px';
+    var w=gs.getBoundingClientRect().width;
+    var vw=document.documentElement.clientWidth;
+    var fs=100*vw/w;
+    gs.style.fontSize=fs+'px'; giant.style.fontSize=fs+'px';
+  }
+  fitGiant();
+  window.addEventListener('resize',fitGiant);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitGiant);
+
+  /* project sheet */
+  var sheet=document.getElementById('sheet');
+  var scroller=sheet.querySelector('.sheet-scroll');
+  var lastTrigger=null;
+  function openSheet(p, trigger){
+    lastTrigger=trigger;
+    document.getElementById('sheet-title').textContent=p.title;
+    document.getElementById('sheet-meta').innerHTML=
+      '<li><span>Role</span><span>'+p.role+'</span></li>'+
+      '<li><span>Client</span><span>'+p.client+'</span></li>'+
+      '<li><span>Year</span><span>'+p.year+'</span></li>';
+    document.getElementById('sheet-outcome').textContent=p.outcome||'';
+    var m=document.getElementById('sheet-media'); m.innerHTML='';
+    var n=p.media||0;
+    if(n>0) m.innerHTML+='<div class="m"><span>Hero image or video</span></div>';
+    if(n>1){ var row='<div class="row">'; for(var i=1;i<n;i++) row+='<div class="m half"><span>Detail '+i+'</span></div>'; row+='</div>'; m.innerHTML+=row; }
+    var link=document.getElementById('sheet-link');
+    if(p.href){ link.href=p.href; link.hidden=false; } else { link.hidden=true; }
+    scroller.scrollTop=0;
+    sheet.showModal();
+    document.body.classList.add('locked');
+  }
+  function closeSheet(){ sheet.close(); }
+  sheet.addEventListener('close',function(){
+    document.body.classList.remove('locked');
+    if(lastTrigger) lastTrigger.focus();
+  });
+  document.getElementById('sheet-close').addEventListener('click',closeSheet);
+  sheet.addEventListener('cancel',function(e){ e.preventDefault(); closeSheet(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && sheet.open) closeSheet(); });
+  sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
+
+  /* active section in the dock */
+  var links=[].slice.call(document.querySelectorAll('.dock a[href^="#"]'));
+  var sections=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  sections.unshift(document.getElementById('top'));
+  function setActive(id){
+    links.forEach(function(a){ if(a.getAttribute('href')==='#'+id) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
+  }
+  if('IntersectionObserver' in window){
+    var so=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) setActive(e.target.id); });
+    },{rootMargin:'-40% 0px -50% 0px'});
+    sections.forEach(function(s){ if(s) so.observe(s); });
+    var ro=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
+    },{rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+})();
+</script>
+</body>
+</html>
