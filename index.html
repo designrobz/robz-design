@@ -81,6 +81,7 @@
   --focus:var(--ink);
   --grid:rgba(5,15,17,.045);   /* margin texture; the grid lines are .11 */
   --grid-size:48px;
+  --giant-scale:1.10;          /* footer ROBZ: 1 = exactly line to line, 1.10 = 10% wider (clipped at the lines) */
 
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
 
@@ -309,7 +310,7 @@ section:first-child{border-top:0}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
-  width:110%; margin:0 0 0 -5%; padding-top:var(--sec); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
+  width:calc(var(--giant-scale) * 100%); margin:0 0 0 calc((1 - var(--giant-scale)) / 2 * 100%); padding-top:var(--sec); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
   font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
 }
 .giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
