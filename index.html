@@ -91,7 +91,8 @@
   --cell:clamp(16px,3vw,48px);
 
   --ease:cubic-bezier(.2,.7,.2,1);
-  --t-fast:160ms; --t-base:280ms; --t-slow:560ms;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --t-fast:160ms; --t-base:280ms; --t-slow:560ms; --t-reveal:900ms;
 }
 :root[data-theme="dark"]{
   --bg:var(--ink); --fg:var(--sky);
@@ -286,6 +287,10 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
 .sheet-scroll{max-height:min(92svh,1100px); overflow:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch}
 .sheet-close{position:absolute; top:var(--s4); right:var(--s4); z-index:2}
 .sheet-body{padding:clamp(24px,4vw,56px)}
+dialog.sheet[open] .sheet-body > *{animation:rise .8s var(--ease-out) both}
+dialog.sheet[open] .sheet-body > :nth-child(2){animation-delay:80ms}
+dialog.sheet[open] .sheet-body > :nth-child(3){animation-delay:160ms}
+dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .sheet-head{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:var(--s6); margin-bottom:var(--s6)}
 @media (max-width:760px){ .sheet-head{grid-template-columns:1fr; gap:var(--s4)} }
 .sheet-head h2{margin:0; font-size:clamp(32px,4vw,56px); font-weight:700; letter-spacing:-.035em; line-height:1}
@@ -304,10 +309,52 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
 .sheet-link:hover{text-decoration-color:currentColor}
 .sheet-link svg{width:16px; height:16px}
 
-/* ── reveal ─────────────────────────────────────────── */
-.reveal{opacity:0; transform:translateY(14px); transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease)}
+/* ── motion ─────────────────────────────────────────── */
+/* scroll reveal: rise + settle, staggered by --i */
+.reveal{
+  opacity:0; transform:translateY(22px);
+  transition:opacity var(--t-reveal) var(--ease-out), transform var(--t-reveal) var(--ease-out);
+  transition-delay:calc(var(--i,0) * 70ms);
+}
 .reveal.in{opacity:1; transform:none}
-@media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none} *{transition-duration:0ms !important; animation-duration:0ms !important} }
+
+/* load sequence in the hero */
+.hero .brand{opacity:0; animation:rise var(--t-reveal) var(--ease-out) 80ms both}
+.hero h1 .w{display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.06em; margin-bottom:-.06em}
+.hero h1 .w > span{display:inline-block; transform:translateY(110%); animation:mask-up 1s var(--ease-out) both}
+.hero h1 .w:nth-child(2) > span{animation-delay:90ms}
+.hero p{opacity:0; animation:rise var(--t-reveal) var(--ease-out) 380ms both}
+.hero .reel{transform:scale(.96) translateY(24px); animation:settle 1.2s var(--ease-out) 520ms both}
+.dock{animation:dock-in .9s var(--ease-out) 900ms both}
+@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
+@keyframes mask-up{from{transform:translateY(110%)} to{transform:none}}
+@keyframes settle{from{opacity:0; transform:scale(.96) translateY(24px)} to{opacity:1; transform:none}}
+@keyframes dock-in{from{opacity:0; transform:translate(-50%,24px)} to{opacity:1; transform:translate(-50%,0)}}
+.dock.away{animation:none}
+
+/* scroll-driven, where the browser supports it: hero recedes, portrait and wordmark ease in */
+@supports (animation-timeline: scroll()){
+  .hero .copy{animation:recede linear both; animation-timeline:scroll(); animation-range:0 70vh}
+  @keyframes recede{to{opacity:0; transform:translateY(-40px)}}
+  .portrait img{animation:unzoom linear both; animation-timeline:view(); animation-range:entry 0% cover 45%}
+  @keyframes unzoom{from{transform:scale(1.12)} to{transform:none}}
+  .giant span{animation:lift linear both; animation-timeline:view(); animation-range:entry 0% entry 100%}
+  @keyframes lift{from{transform:translateY(60%)} to{transform:translateY(-.05em)}}
+}
+
+/* hover: quiet lift, image breathes */
+.card .thumb{transition:transform var(--t-slow) var(--ease-out)}
+.card .thumb img{transition:transform 1.2s var(--ease-out)}
+.card:hover .thumb img{transform:scale(1.04)}
+.card:active .thumb{transform:translateY(-1px) scale(.995)}
+.theme svg{transition:transform var(--t-slow) var(--ease-out), opacity var(--t-base) var(--ease)}
+.theme:active svg{transform:rotate(30deg)}
+
+@media (prefers-reduced-motion:reduce){
+  .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock{opacity:1; transform:none; animation:none; transition:none}
+  .hero .copy,.portrait img,.giant span{animation:none}
+  *{transition-duration:0ms !important; animation-duration:0ms !important}
+}
 </style>
 </head>
 <body>
@@ -317,10 +364,10 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   <section class="hero frame ruled cols-1" id="top">
     <a class="brand" href="#top" aria-label="Robz, home"><span class="wordmark">Robz<sup>®</sup></span></a>
     <div class="copy">
-      <h1>Creative Partner</h1>
+      <h1><span class="w"><span>Creative</span></span> <span class="w"><span>Partner</span></span></h1>
       <p>For founders and brands that want to be seen, remembered and chosen.</p>
     </div>
-    <div class="reel reveal">
+    <div class="reel">
       <button class="play" type="button" aria-label="Play showreel">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
       </button>
@@ -331,8 +378,8 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   <!-- WORK -->
   <section class="frame ruled work-section" id="work">
     <div class="section-head cell-pad">
-      <h2>Work</h2>
-      <p>What it looked like, and what it did.</p>
+      <h2 class="reveal">Work</h2>
+      <p class="reveal" style="--i:1">What it looked like, and what it did.</p>
     </div>
     <div class="work-grid" id="grid"></div>
   </section>
@@ -340,8 +387,8 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   <!-- ABOUT -->
   <section class="frame ruled cols-1" id="about">
     <div class="section-head cell-pad">
-      <h2>About</h2>
-      <p>Short version.</p>
+      <h2 class="reveal">About</h2>
+      <p class="reveal" style="--i:1">Short version.</p>
     </div>
     <div class="about-grid">
       <div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div>
@@ -349,7 +396,7 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
         <h3>You have something worth attention. I make sure it gets it.</h3>
         <p>Strategy, design and video. One person, start to finish.</p>
         <p>Based in Lisbon, working with the US and the UK.</p>
-        <ul class="facts">
+        <ul class="facts" id="facts">
           <li><span class="k">Roles</span><span>Creative Director, Strategist, Designer, Video</span></li>
           <li><span class="k">Where</span><span>Lisbon, Portugal (GMT+1)</span></li>
           <li><span class="k">Available</span><span>Q4 2026</span></li>
@@ -362,13 +409,13 @@ dialog.sheet[open]::backdrop{animation:fade var(--t-slow) var(--ease)}
   <!-- SOCIALS -->
   <section class="socials frame ruled socials-section" id="socials">
     <div class="section-head cell-pad">
-      <h2>Socials</h2>
-      <p>Say hi.</p>
+      <h2 class="reveal">Socials</h2>
+      <p class="reveal" style="--i:1">Say hi.</p>
     </div>
     <div class="cells">
-      <a class="cell" href="https://www.linkedin.com/in/roberto-junior-48630a33a" target="_blank" rel="noopener"><span class="glyph">in</span><span class="name">LinkedIn</span></a>
-      <a class="cell" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
-      <a class="cell" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
+      <a class="cell reveal" href="https://www.linkedin.com/in/roberto-junior-48630a33a" target="_blank" rel="noopener"><span class="glyph">in</span><span class="name">LinkedIn</span></a>
+      <a class="cell reveal" style="--i:1" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
+      <a class="cell reveal" style="--i:2" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
     </div>
   </section>
   <footer class="frame ruled foot"><div class="giant" aria-hidden="true"><span>Robz</span></div></footer>
@@ -440,14 +487,17 @@ var PROJECTS=[
 
   /* work: cards */
   var grid=document.getElementById('grid');
-  PROJECTS.forEach(function(p){
+  PROJECTS.forEach(function(p,i){
     var el=document.createElement('button');
     el.className='card reveal'; el.type='button'; el.dataset.id=p.id; el.setAttribute('aria-haspopup','dialog');
+    el.style.setProperty('--i', String(i%3));
     el.innerHTML='<div class="thumb">'+(p.thumb? '<img src="'+p.thumb+'" alt="'+p.title+'" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+
       '<div class="meta"><div><h3>'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
     el.addEventListener('click',function(){ openSheet(p, el); });
     grid.appendChild(el);
   });
+
+  [].slice.call(document.querySelectorAll('#facts li')).forEach(function(li,i){ li.classList.add('reveal'); li.style.setProperty('--i', String(i+1)); });
 
   /* giant wordmark: fit to the full viewport width, no distortion */
   var giant=document.querySelector('.giant'), gs=giant.querySelector('span');
