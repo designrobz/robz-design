@@ -215,14 +215,6 @@ input, textarea{cursor:auto}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,204,113,.45)} 70%{box-shadow:0 0 0 8px rgba(46,204,113,0)} 100%{box-shadow:0 0 0 0 rgba(46,204,113,0)}}
 @media (max-width:760px){ .hero-meta > span{display:none} .hero-meta{justify-content:center} }
 
-/* ── services ticker ───────────────────────────────── */
-.ticker{overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:14px 0; white-space:nowrap; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.ticker .track{display:inline-flex; gap:0; animation:ticker 40s linear infinite; will-change:transform}
-.ticker:hover .track{animation-play-state:paused}
-.ticker span{display:inline-flex; align-items:center; gap:28px; padding-right:28px; font-size:15px; font-weight:500; letter-spacing:-.005em; color:var(--muted)}
-.ticker i{width:5px; height:5px; border-radius:50%; background:var(--line-strong); display:inline-block}
-@keyframes ticker{to{transform:translateX(-50%)}}
-
 /* ── outro: the closing ask ───────────────────────── */
 .outro-body{padding:var(--blk) var(--cell)}
 .outro h3{margin:0 0 var(--s5); font-size:clamp(40px,7vw,120px); font-weight:700; letter-spacing:-.045em; line-height:.95; text-wrap:balance}
@@ -258,6 +250,72 @@ input, textarea{cursor:auto}
 /* ── toast ──────────────────────────────────────────── */
 .toast{position:fixed; left:50%; bottom:calc(var(--s5) + 64px + env(safe-area-inset-bottom)); transform:translate(-50%,12px); z-index:30; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-size:14px; font-weight:500; opacity:0; pointer-events:none; transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease-out)}
 .toast.on{opacity:1; transform:translate(-50%,0)}
+
+
+/* ── sticky title boxes: the title holds while the content passes ── */
+.section-head{position:sticky; top:0; z-index:3; background:var(--bg)}
+
+/* ── work rail: big, draggable, snaps ──────────────── */
+.rail-wrap{position:relative}
+.rail{display:flex; gap:var(--gap); padding:var(--blk) var(--cell); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; cursor:var(--cur-grab)}
+.rail::-webkit-scrollbar{display:none}
+.rail.dragging{cursor:var(--cur-grabbing); scroll-snap-type:none; user-select:none}
+.rail .slot{flex:0 0 auto; width:clamp(300px, 58vw, 880px); scroll-snap-align:start; padding:0}
+@media (max-width:760px){ .rail .slot{width:84vw} }
+.rail .card h3{font-size:clamp(22px,2vw,30px); letter-spacing:-.025em}
+.rail .card .role{font-size:16px}
+.rail .card .idx{font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; margin-bottom:var(--s2); display:block}
+.rail-ui{display:flex; align-items:center; gap:var(--s3); margin-left:auto}
+.rail-ui .count{font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; margin-right:var(--s2)}
+.rail-ui .round{width:40px; height:40px}
+.rail-ui .round[disabled]{opacity:.35; pointer-events:none}
+.section-head.with-ui{display:flex; align-items:center; gap:var(--s5)}
+.section-head.with-ui .num{position:static; transform:none; margin-left:var(--s4)}
+
+/* ── services: numbered rows that open ──────────────── */
+.svc{list-style:none; margin:0; padding:0}
+.svc li{border-bottom:1px solid var(--line)}
+.svc li:last-child{border-bottom:0}
+.svc button{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); align-items:center; padding:clamp(20px,2.6vw,36px) var(--cell); text-align:left; gap:var(--s4); transition:background-color var(--t-fast) var(--ease)}
+.svc button:hover{background:var(--chip)}
+.svc .k{font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums}
+.svc .t{display:flex; align-items:center; justify-content:space-between; gap:var(--s4); font-size:clamp(24px,3vw,44px); font-weight:700; letter-spacing:-.03em; line-height:1.05}
+.svc .plus{width:28px; height:28px; flex-shrink:0; position:relative}
+.svc .plus::before,.svc .plus::after{content:""; position:absolute; left:50%; top:50%; width:16px; height:2px; background:currentColor; transform:translate(-50%,-50%); transition:transform var(--t-base) var(--ease-out)}
+.svc .plus::after{transform:translate(-50%,-50%) rotate(90deg)}
+.svc li.open .plus::after{transform:translate(-50%,-50%) rotate(0deg)}
+.svc .body{display:grid; grid-template-rows:0fr; transition:grid-template-rows var(--t-slow) var(--ease-out)}
+.svc li.open .body{grid-template-rows:1fr}
+.svc .body > div{overflow:hidden}
+.svc .inner{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:var(--s4); padding:0 var(--cell) clamp(20px,2.6vw,36px)}
+.svc .inner p{grid-column:2; margin:0 0 var(--s3); font-size:clamp(17px,1.3vw,21px); line-height:1.4; max-width:var(--measure)}
+.svc .tags{grid-column:2; display:flex; flex-wrap:wrap; gap:var(--s2)}
+.svc .tags span{font-size:14px; padding:6px 12px; border:1px solid var(--line-strong); border-radius:999px; color:var(--muted)}
+@media (max-width:760px){ .svc button,.svc .inner{grid-template-columns:1fr} .svc .inner p,.svc .tags{grid-column:1} .svc .k{display:none} }
+
+/* ── kind words: one voice at a time, big ────────────── */
+.quotes{display:grid; grid-template-columns:1fr; padding:var(--blk) var(--cell); position:relative; min-height:clamp(260px,32vw,440px)}
+.quote{grid-area:1/1; margin:0; display:flex; flex-direction:column; justify-content:center; gap:clamp(20px,2.5vw,32px); opacity:0; transform:translateY(16px); transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out); pointer-events:none; padding:0}
+.quote.on{opacity:1; transform:none; pointer-events:auto}
+.quote p{margin:0; font-size:clamp(24px,3.2vw,48px); font-weight:600; line-height:1.15; letter-spacing:-.03em; text-wrap:balance; max-width:22ch}
+.quote p::before{content:"\201C"; margin-left:-.45em; opacity:.45}
+.quote p::after{content:"\201D"; opacity:.45}
+.quote footer{display:flex; align-items:center; gap:var(--s3)}
+.quote .avatar{width:44px; height:44px; border-radius:50%; background:var(--surface); flex-shrink:0; overflow:hidden}
+.quote .who{font-size:15px; line-height:1.3}
+.quote .who b{display:block; font-weight:600}
+.quote .who span{color:var(--muted)}
+.quotes-ui{position:absolute; right:var(--cell); bottom:var(--blk); display:flex; align-items:center; gap:var(--s3)}
+.quotes-ui .count{font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; margin-right:var(--s2)}
+.quotes-ui .round{width:40px; height:40px}
+@media (max-width:760px){ .quotes-ui{position:static; margin-top:var(--s5); justify-content:flex-end} }
+
+/* ── outro: inverted ────────────────────────────────── */
+#talk .section-body{background:var(--fg); color:var(--bg)}
+#talk .btn.primary{background:var(--bg); color:var(--fg)}
+#talk .row{border-top-color:rgba(183,231,252,.2); color:rgba(183,231,252,.6)}
+:root[data-theme="dark"] #talk .row{border-top-color:rgba(5,15,17,.2); color:rgba(5,15,17,.6)}
+#talk .toast{color:var(--bg)}
 
 /* ── buttons ────────────────────────────────────────── */
 .actions{display:flex; justify-content:center; gap:var(--s3); flex-wrap:wrap}
@@ -336,14 +394,6 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .stat .l{font-size:15px; color:var(--muted); letter-spacing:-.005em}
 
 /* ── work ───────────────────────────────────────────── */
-.work-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--blk)}
-@media (min-width:1101px){
-  .work-grid .slot:nth-child(6n+1){grid-column:span 2}
-  .work-grid .slot:nth-child(6n+5){grid-column:span 2}
-}
-.work-grid .slot{padding-inline:var(--cell)}
-@media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
-@media (max-width:760px){ .work-grid{grid-template-columns:1fr} }
 .card{display:block; text-align:left; width:100%; color:inherit}
 .card .thumb{
   position:relative; width:100%; aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden;
@@ -385,20 +435,7 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .card .role{margin:var(--s1) 0 0; font-size:15px; color:var(--muted)}
 .card .year{font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0}
 
-/* ── testimonials ───────────────────────────────────── */
-.quotes{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--blk)}
-@media (max-width:1100px){ .quotes{grid-template-columns:repeat(2,minmax(0,1fr))} }
-@media (max-width:760px){ .quotes{grid-template-columns:1fr} }
-.quote{margin:0; padding-inline:var(--cell); display:flex; flex-direction:column; gap:clamp(20px,2.5vw,32px)}
-.quote p{margin:0; font-size:17px; line-height:1.5; letter-spacing:-.008em; text-wrap:pretty}
-.quote p::before{content:"\201C"; margin-left:-.45em; opacity:.5}
-.quote p::after{content:"\201D"; opacity:.5}
-.quote footer{display:flex; align-items:center; gap:var(--s3); margin-top:auto}
-.quote .avatar{width:40px; height:40px; border-radius:50%; background:var(--surface); flex-shrink:0; overflow:hidden}
-.quote .avatar img{width:100%; height:100%; object-fit:cover}
-.quote .who{font-size:15px; line-height:1.3}
-.quote .who b{display:block; font-weight:600}
-.quote .who span{color:var(--muted)}
+/* ── testimonials: see 'kind words' above ── */
 
 /* ── about ──────────────────────────────────────────── */
 /* text column = three stacked cells (intro / facts / call), every rule runs mid-line to outer line */
@@ -602,7 +639,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 @media (prefers-reduced-motion:reduce){
   .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock,.hero-card{opacity:1; transform:none; animation:none; transition:none}
   .hero-card .par{animation:none}
-  .hero .copy,.portrait img,.giant span,.ticker .track,.hero-meta .dot{animation:none}
+  .hero .copy,.portrait img,.giant span,.hero-meta .dot{animation:none}
   .wave .l{transform:none; opacity:1; transition:none} .roll > span > span{transition:none} .odo .d .col{transition:none}
   .tilt3d{transform:none}
   *{transition-duration:0ms !important; animation-duration:0ms !important}
@@ -638,11 +675,6 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     </div>
   </section>
 
-  <!-- TICKER -->
-  <section class="frame ruled proof-section" aria-label="Services">
-    <div class="ticker" id="ticker"><div class="track"></div></div>
-  </section>
-
   <!-- PROOF -->
   <section class="frame ruled proof-section" id="proof" aria-label="Results">
     <div class="stats" id="stats"></div>
@@ -650,11 +682,26 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 
   <!-- WORK -->
   <section class="frame ruled" id="work">
-    <div class="section-head">
+    <div class="section-head with-ui">
       <h2 class="reveal">Work</h2>
+      <div class="rail-ui">
+        <span class="count" id="rail-count">01 / 06</span>
+        <button class="round" type="button" id="rail-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+        <button class="round" type="button" id="rail-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
     </div>
-    <div class="section-body grid3">
-      <div class="work-grid" id="grid"></div>
+    <div class="section-body flush">
+      <div class="rail-wrap"><div class="rail" id="grid" aria-label="Selected work"></div></div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="frame ruled" id="services">
+    <div class="section-head">
+      <h2 class="reveal">What I do</h2>
+    </div>
+    <div class="section-body flush">
+      <ul class="svc" id="svc"></ul>
     </div>
   </section>
 
@@ -663,21 +710,26 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     <div class="section-head">
       <h2 class="reveal">Kind words</h2>
     </div>
-    <div class="section-body grid3">
-    <div class="quotes">
-      <figure class="quote reveal" style="--i:0">
-        <p>Placeholder. Two or three lines on what changed after working together, in the client's own words.</p>
-        <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
-      </figure>
-      <figure class="quote reveal" style="--i:1">
-        <p>Placeholder. A concrete result works best here: views, clicks, a launch that landed, a brand people finally remembered.</p>
-        <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
-      </figure>
-      <figure class="quote reveal" style="--i:2">
-        <p>Placeholder. Short and specific beats long and generic. One sentence is enough if it is the right one.</p>
-        <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
-      </figure>
-    </div>
+    <div class="section-body flush">
+      <div class="quotes" id="quotes">
+        <figure class="quote on">
+          <p>Placeholder. Two or three lines on what changed after working together, in the client's own words.</p>
+          <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
+        </figure>
+        <figure class="quote">
+          <p>Placeholder. A concrete result works best here: views, clicks, a launch that landed, a brand people finally remembered.</p>
+          <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
+        </figure>
+        <figure class="quote">
+          <p>Placeholder. Short and specific beats long and generic. One sentence is enough if it is the right one.</p>
+          <figcaption><footer><span class="avatar" aria-hidden="true"></span><span class="who"><b>Client name</b><span>Role, Company</span></span></footer></figcaption>
+        </figure>
+        <div class="quotes-ui">
+          <span class="count" id="q-count">01 / 03</span>
+          <button class="round" type="button" id="q-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+          <button class="round" type="button" id="q-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -809,6 +861,14 @@ var PROJECTS=[
    Empty = the buttons fall back to email with a "Call with Robz" subject. */
 var BOOKING_URL='';
 
+/* services — edit freely */
+var SERVICES=[
+  {t:'Creative direction', d:'The idea, the look, and the call on what ships. One vision from brief to final cut.', tags:['Art direction','Concept','Campaigns','Video']},
+  {t:'Strategy', d:'What to say, to whom, and why they would care. Positioning that survives contact with the feed.', tags:['Positioning','Content strategy','YouTube packaging']},
+  {t:'Video & motion', d:'The edit, the motion, the sound. The cut that keeps people watching past the first ten seconds.', tags:['Editing','Motion graphics','Thumbnails','Titles']},
+  {t:'Brand & design', d:'Identities and interfaces people remember. Systems, not one-offs.', tags:['Identity','Web','Decks','Design systems']}
+];
+
 /* proof band — PLACEHOLDER numbers, replace with real ones */
 var STATS=[
   {value:120, suffix:'M+', label:'views on thumbnails I designed'},
@@ -877,11 +937,52 @@ var STATS=[
     var slot=document.createElement('div'); slot.className='slot';
     var el=document.createElement('article');
     el.className='card reveal'; el.dataset.id=p.id; el.style.setProperty('--i', String(i%3));
-    el.innerHTML='<button class="thumb" type="button" aria-haspopup="dialog" aria-labelledby="t-'+p.id+'"><div class="main">'+(p.thumb? '<img src="'+p.thumb+'" alt="" width="1600" height="900" loading="lazy" decoding="async">' : '<span>16 : 9</span>')+'</div>'+feedHTML(p, 1)+'</button>'+
+    el.innerHTML='<span class="idx">'+String(i+1).padStart(2,'0')+'</span><button class="thumb" type="button" aria-haspopup="dialog" aria-labelledby="t-'+p.id+'"><div class="main">'+(p.thumb? '<img src="'+p.thumb+'" alt="" width="1600" height="900" loading="lazy" decoding="async" draggable="false">' : '<span>16 : 9</span>')+'</div>'+feedHTML(p, 1)+'</button>'+
       '<div class="meta"><div><h3 id="t-'+p.id+'">'+p.title+'</h3><p class="role">'+p.role+'</p></div><span class="year">'+p.year+'</span></div>';
-    el.addEventListener('click',function(){ openSheet(p, el.querySelector('.thumb')); });
+    el.addEventListener('click',function(e){ if(grid.dataset.moved==='1') return; openSheet(p, el.querySelector('.thumb')); });
     slot.appendChild(el); grid.appendChild(slot);
   });
+
+  /* rail: drag, arrows, counter */
+  (function(){
+    var rail=grid, slots=[].slice.call(rail.querySelectorAll('.slot')), count=document.getElementById('rail-count'), prev=document.getElementById('rail-prev'), next=document.getElementById('rail-next');
+    var down=false, sx=0, sl=0;
+    rail.addEventListener('pointerdown',function(e){ if(e.pointerType==='touch') return; down=true; sx=e.clientX; sl=rail.scrollLeft; rail.dataset.moved='0'; });
+    window.addEventListener('pointermove',function(e){ if(!down) return; var dx=e.clientX-sx; if(Math.abs(dx)>6){ rail.classList.add('dragging'); rail.dataset.moved='1'; } rail.scrollLeft=sl-dx; });
+    window.addEventListener('pointerup',function(){ if(!down) return; down=false; rail.classList.remove('dragging'); setTimeout(function(){ rail.dataset.moved='0'; },50); });
+    function idx(){ var x=rail.scrollLeft+8, i=0; slots.forEach(function(sl,k){ if(sl.offsetLeft-parseFloat(getComputedStyle(rail).paddingLeft)<=x) i=k; }); return i; }
+    function update(){ var i=idx(); count.textContent=String(i+1).padStart(2,'0')+' / '+String(slots.length).padStart(2,'0'); prev.disabled=i<=0; next.disabled=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-4; }
+    function go(d){ var i=Math.max(0,Math.min(slots.length-1, idx()+d)); rail.scrollTo({left:slots[i].offsetLeft-parseFloat(getComputedStyle(rail).paddingLeft), behavior:reduce?'auto':'smooth'}); }
+    prev.addEventListener('click',function(){ go(-1); }); next.addEventListener('click',function(){ go(1); });
+    rail.addEventListener('scroll',update,{passive:true}); window.addEventListener('resize',update); update();
+  })();
+
+  /* services list */
+  var svc=document.getElementById('svc');
+  SERVICES.forEach(function(sv,i){
+    var li=document.createElement('li');
+    li.innerHTML='<button type="button" aria-expanded="false"><span class="k">'+String(i+1).padStart(2,'0')+'</span><span class="t"><span>'+sv.t+'</span><span class="plus" aria-hidden="true"></span></span></button>'+
+      '<div class="body"><div><div class="inner"><p>'+sv.d+'</p><div class="tags">'+sv.tags.map(function(t){return '<span>'+t+'</span>'}).join('')+'</div></div></div></div>';
+    var b=li.querySelector('button');
+    b.addEventListener('click',function(){
+      var open=li.classList.contains('open');
+      [].slice.call(svc.children).forEach(function(o){ o.classList.remove('open'); o.querySelector('button').setAttribute('aria-expanded','false'); });
+      if(!open){ li.classList.add('open'); b.setAttribute('aria-expanded','true'); }
+    });
+    svc.appendChild(li);
+  });
+  if(svc.firstChild){ svc.firstChild.classList.add('open'); svc.firstChild.querySelector('button').setAttribute('aria-expanded','true'); }
+
+  /* kind words: one at a time */
+  (function(){
+    var qs=[].slice.call(document.querySelectorAll('#quotes .quote')), cur=0, timer=null, c=document.getElementById('q-count');
+    function show(i){ cur=(i+qs.length)%qs.length; qs.forEach(function(q,k){ q.classList.toggle('on',k===cur); }); c.textContent=String(cur+1).padStart(2,'0')+' / '+String(qs.length).padStart(2,'0'); }
+    function auto(){ clearInterval(timer); if(!reduce) timer=setInterval(function(){ show(cur+1); },6000); }
+    document.getElementById('q-prev').addEventListener('click',function(){ show(cur-1); auto(); });
+    document.getElementById('q-next').addEventListener('click',function(){ show(cur+1); auto(); });
+    var box=document.getElementById('quotes'); box.addEventListener('mouseenter',function(){ clearInterval(timer); }); box.addEventListener('mouseleave',auto);
+    show(0); auto();
+  })();
 
   /* hero cards: first two projects */
   var hc=document.getElementById('hero-cards');
@@ -1071,11 +1172,6 @@ var STATS=[
   /* local time in Lisbon */
   function clock(){ var t=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Lisbon'}).format(new Date()); [].slice.call(document.querySelectorAll('#clock, .clock2')).forEach(function(e){ e.textContent=t; }); }
   clock(); setInterval(clock, 15000);
-
-  /* services ticker */
-  var SERVICES=['Creative direction','Strategy','YouTube packaging','Thumbnails','Video editing','Brand identity','Motion','Web'];
-  var track=document.querySelector('#ticker .track');
-  if(track){ var one=SERVICES.map(function(x){ return '<span>'+x+'<i></i></span>'; }).join(''); track.innerHTML=one+one; }
 
   /* booking */
   var book=document.getElementById('book'), bookFrame=document.getElementById('book-frame'), bookLast=null, bookLoaded=false;
