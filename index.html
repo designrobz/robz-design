@@ -213,7 +213,7 @@ dialog.booking .sheet-scroll{overflow:hidden}
 /* hero side cards: two pieces of work flanking the headline (from the original draft, straight, light parallax) */
 .hero .copy{position:relative}
 .hero-card{
-  position:absolute; width:16%; aspect-ratio:4/5; border-radius:var(--r-m); overflow:hidden;
+  position:absolute; width:18%; aspect-ratio:4/5; border-radius:var(--r-m); overflow:hidden;
   --tilt:0deg; rotate:var(--tilt);
   background:var(--surface); color:var(--on-surface); display:grid; place-items:center; padding:0; z-index:1;
   box-shadow:0 1px 2px rgba(5,15,17,.08), 0 24px 60px -24px rgba(5,15,17,.35);
@@ -221,8 +221,8 @@ dialog.booking .sheet-scroll{overflow:hidden}
 }
 .hero-card img{width:100%; height:100%; object-fit:cover}
 .hero-card .ph{font-size:12px; font-weight:500; opacity:.5}
-.hero-card.l{left:calc(var(--cell) + 1%); top:44%; --tilt:-8deg}
-.hero-card.r{right:calc(var(--cell) + 1%); top:6%; --tilt:10deg}
+.hero-card.l{left:6%; top:12%; --tilt:-8deg}
+.hero-card.r{right:6%; top:27%; --tilt:10deg}
 .hero-card{cursor:grab; touch-action:none; user-select:none}
 .hero-card:hover{transform:translateY(-3px) scale(1.02)}
 .hero-card.drag{cursor:grabbing; z-index:3; animation-play-state:paused; transition:none; box-shadow:0 2px 4px rgba(5,15,17,.1), 0 40px 80px -28px rgba(5,15,17,.5)}
