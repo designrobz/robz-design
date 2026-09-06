@@ -129,7 +129,7 @@ html.ready body{transition:background-color var(--t-base) var(--ease), color var
 body.locked{overflow:hidden}
 a{color:inherit; text-decoration:none}
 img,video{display:block; max-width:100%}
-button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer}
+button{font:inherit; color:inherit; background:none; border:0; padding:0}
 :focus-visible{outline:2px solid var(--focus); outline-offset:4px}
 .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 
@@ -186,6 +186,26 @@ section:first-child{border-top:0}
 .hero .copy{text-align:center; padding:clamp(40px,6vw,88px) var(--cell) clamp(36px,5vw,72px)}
 .hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
 .hero p{margin:clamp(20px,2.5vw,32px) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
+/* ── cursors: one family, drawn in the brand colours ──── */
+:root{
+  --cur-arrow:url(assets/cursor-arrow-light.svg) 5 3, auto;
+  --cur-pointer:url(assets/cursor-pointer-light.svg) 16 2, pointer;
+  --cur-grab:url(assets/cursor-grab-light.svg) 16 18, grab;
+  --cur-grabbing:url(assets/cursor-grabbing-light.svg) 16 18, grabbing;
+}
+:root[data-theme="dark"]{
+  --cur-arrow:url(assets/cursor-arrow-dark.svg) 5 3, auto;
+  --cur-pointer:url(assets/cursor-pointer-dark.svg) 16 2, pointer;
+  --cur-grab:url(assets/cursor-grab-dark.svg) 16 18, grab;
+  --cur-grabbing:url(assets/cursor-grabbing-dark.svg) 16 18, grabbing;
+}
+html, body{cursor:var(--cur-arrow)}
+a, button, .card, .cell, .reel, .stat, .quote, label, select, summary, [role="button"]{cursor:var(--cur-pointer)}
+.hero-card{cursor:var(--cur-grab)}
+.hero-card.drag{cursor:var(--cur-grabbing)}
+input, textarea{cursor:auto}
+@media (hover:none){ html, body, a, button, .card, .cell, .reel, .stat, .quote, .hero-card{cursor:auto} }
+
 /* ── buttons ────────────────────────────────────────── */
 .actions{display:flex; justify-content:center; gap:var(--s3); flex-wrap:wrap}
 .btn{
@@ -223,9 +243,9 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .hero-card .ph{font-size:12px; font-weight:500; opacity:.5}
 .hero-card.l{left:6%; top:12%; --tilt:-8deg}
 .hero-card.r{right:6%; top:27%; --tilt:10deg}
-.hero-card{cursor:grab; touch-action:none; user-select:none}
+.hero-card{touch-action:none; user-select:none}
 .hero-card:hover{transform:translateY(-3px) scale(1.02)}
-.hero-card.drag{cursor:grabbing; z-index:3; animation-play-state:paused; transition:none; box-shadow:0 2px 4px rgba(5,15,17,.1), 0 40px 80px -28px rgba(5,15,17,.5)}
+.hero-card.drag{z-index:3; animation-play-state:paused; transition:none; box-shadow:0 2px 4px rgba(5,15,17,.1), 0 40px 80px -28px rgba(5,15,17,.5)}
 .hero-card.drag .par{animation-play-state:paused}
 .hero-card.l{opacity:0; animation:settle 1.2s var(--ease-out) 700ms both, float-l 7s ease-in-out 1.9s infinite}
 .hero-card.r{opacity:0; animation:settle 1.2s var(--ease-out) 820ms both, float-r 8.5s ease-in-out 2.4s infinite}
@@ -267,7 +287,7 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .work-grid .slot{padding-inline:var(--cell)}
 @media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:760px){ .work-grid{grid-template-columns:1fr} }
-.card{display:block; text-align:left; width:100%; color:inherit; cursor:pointer}
+.card{display:block; text-align:left; width:100%; color:inherit}
 .card .thumb{
   position:relative; width:100%; aspect-ratio:16/9; border-radius:var(--r-s); overflow:hidden;
   background:var(--surface); color:var(--on-surface); display:block;
@@ -467,10 +487,10 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 .portrait img{transition:transform 1.2s var(--ease-out)}
 .portrait:hover img{transform:scale(1.04)}
 /* reel: play breathes, cursor says so */
-.reel{cursor:pointer; transition:transform var(--t-slow) var(--ease-out)}
+.reel{transition:transform var(--t-slow) var(--ease-out)}
 .reel:hover .play{transform:scale(1.1)}
 /* stats: numbers re-count on hover (JS) */
-.stat{transition:background-color var(--t-fast) var(--ease); cursor:default}
+.stat{transition:background-color var(--t-fast) var(--ease)}
 .stat:hover{background:var(--chip)}
 /* theme toggle */
 .theme svg{transition:transform var(--t-slow) var(--ease-out)}
