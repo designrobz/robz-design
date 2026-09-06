@@ -182,7 +182,7 @@ section:first-child{border-top:0}
 
 /* ── hero ───────────────────────────────────────────── */
 .hero{padding-top:clamp(28px,4vw,48px); padding-bottom:var(--sec); display:flex; flex-direction:column}
-.hero .brand{display:flex; justify-content:center; font-size:32px}
+.hero .brand{display:inline-flex; font-size:32px}
 .hero .copy{text-align:center; padding:clamp(40px,6vw,88px) var(--cell) clamp(36px,5vw,72px)}
 .hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
 .hero p{margin:clamp(20px,2.5vw,32px) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
@@ -205,6 +205,32 @@ a, button, .card, .cell, .reel, .stat, .quote, label, select, summary, [role="bu
 .hero-card.drag{cursor:var(--cur-grabbing)}
 input, textarea{cursor:auto}
 @media (hover:none){ html, body, a, button, .card, .cell, .reel, .stat, .quote, .hero-card{cursor:auto} }
+
+/* ── hero meta bar: place, local time, availability ───── */
+.hero-meta{display:flex; justify-content:space-between; align-items:center; padding:0 var(--cell); font-size:14px; font-weight:500; color:var(--muted); letter-spacing:-.005em; font-variant-numeric:tabular-nums}
+.hero-meta .brand{font-size:32px; color:var(--fg)}
+.hero-meta > span{display:flex; align-items:center; gap:8px; flex:1}
+.hero-meta > span:last-child{justify-content:flex-end}
+.hero-meta .dot{width:8px; height:8px; border-radius:50%; background:#2ecc71; box-shadow:0 0 0 0 rgba(46,204,113,.5); animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,204,113,.45)} 70%{box-shadow:0 0 0 8px rgba(46,204,113,0)} 100%{box-shadow:0 0 0 0 rgba(46,204,113,0)}}
+@media (max-width:760px){ .hero-meta > span{display:none} .hero-meta{justify-content:center} }
+
+/* ── services ticker ───────────────────────────────── */
+.ticker{overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:14px 0; white-space:nowrap; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker .track{display:inline-flex; gap:0; animation:ticker 40s linear infinite; will-change:transform}
+.ticker:hover .track{animation-play-state:paused}
+.ticker span{display:inline-flex; align-items:center; gap:28px; padding-right:28px; font-size:15px; font-weight:500; letter-spacing:-.005em; color:var(--muted)}
+.ticker i{width:5px; height:5px; border-radius:50%; background:var(--line-strong); display:inline-block}
+@keyframes ticker{to{transform:translateX(-50%)}}
+
+/* ── outro: the closing ask ───────────────────────── */
+.outro-body{padding:var(--blk) var(--cell)}
+.outro h3{margin:0 0 var(--s5); font-size:clamp(40px,7vw,120px); font-weight:700; letter-spacing:-.045em; line-height:.95; text-wrap:balance}
+.outro .mail{display:inline-block; font-size:clamp(20px,2.4vw,36px); font-weight:600; letter-spacing:-.02em; margin-bottom:var(--s6); background-image:linear-gradient(currentColor,currentColor); background-size:100% 2px; background-repeat:no-repeat; background-position:0 100%; transition:background-size var(--t-base) var(--ease-out)}
+.outro .mail:hover{background-size:0 2px}
+.outro .row{display:flex; justify-content:space-between; align-items:center; gap:var(--s4); flex-wrap:wrap; margin-top:var(--blk); padding-top:var(--s4); border-top:1px solid var(--line); font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums}
+.outro .row a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
+.outro .row a:hover{text-decoration-color:currentColor}
 
 /* ── buttons ────────────────────────────────────────── */
 .actions{display:flex; justify-content:center; gap:var(--s3); flex-wrap:wrap}
@@ -284,6 +310,10 @@ dialog.booking .sheet-scroll{overflow:hidden}
 
 /* ── work ───────────────────────────────────────────── */
 .work-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:var(--blk)}
+@media (min-width:1101px){
+  .work-grid .slot:nth-child(6n+1){grid-column:span 2}
+  .work-grid .slot:nth-child(6n+5){grid-column:span 2}
+}
 .work-grid .slot{padding-inline:var(--cell)}
 @media (max-width:1100px){ .work-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:760px){ .work-grid{grid-template-columns:1fr} }
@@ -545,7 +575,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 @media (prefers-reduced-motion:reduce){
   .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock,.hero-card{opacity:1; transform:none; animation:none; transition:none}
   .hero-card .par{animation:none}
-  .hero .copy,.portrait img,.giant span{animation:none}
+  .hero .copy,.portrait img,.giant span,.ticker .track,.hero-meta .dot{animation:none}
   .tilt3d{transform:none}
   *{transition-duration:0ms !important; animation-duration:0ms !important}
 }
@@ -556,7 +586,11 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 <main>
   <!-- HERO: outer lines only -->
   <section class="hero frame ruled" id="top">
-    <a class="brand" href="#top" aria-label="Robz, home"><span class="wordmark">Robz<sup>®</sup></span></a>
+    <div class="hero-meta">
+      <span>Lisbon <span id="clock" aria-label="Local time in Lisbon">--:--</span></span>
+      <a class="brand" href="#top" aria-label="Robz, home"><span class="wordmark">Robz<sup>®</sup></span></a>
+      <span><i class="dot" aria-hidden="true"></i>Available Q4 2026</span>
+    </div>
     <div class="copy">
       <h1><span class="w"><span>Creative</span></span> <span class="w"><span>Partner</span></span></h1>
       <p>For founders and brands that want to be seen, remembered and chosen.</p>
@@ -574,6 +608,11 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
       </button>
       <div class="label"><span class="dot"></span>Showreel 2026</div>
     </div>
+  </section>
+
+  <!-- TICKER -->
+  <section class="frame ruled proof-section" aria-label="Services">
+    <div class="ticker" id="ticker"><div class="track"></div></div>
   </section>
 
   <!-- PROOF -->
@@ -654,6 +693,24 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
       <a class="cell reveal" style="--i:1" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
       <a class="cell reveal" style="--i:2" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
     </div>
+    </div>
+  </section>
+
+  <!-- OUTRO -->
+  <section class="frame ruled" id="talk">
+    <div class="section-body outro-body outro">
+      <h3 class="reveal">Let's make it worth their attention.</h3>
+      <a class="mail reveal" style="--i:1" href="mailto:designrobertojr@gmail.com">designrobertojr@gmail.com</a>
+      <div class="actions reveal" style="--i:2; justify-content:flex-start">
+        <button class="btn primary book" type="button">Book a call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="row">
+        <span>© 2026 Robz®</span>
+        <span>Lisbon, <span class="clock2">--:--</span></span>
+        <a href="#top">Back to top</a>
+      </div>
     </div>
   </section>
   <footer class="frame ruled foot"><div class="giant" aria-hidden="true"><span>Robz</span></div></footer>
@@ -932,6 +989,15 @@ var STATS=[
   document.getElementById('sheet-close').addEventListener('click',closeSheet);
   sheet.addEventListener('cancel',function(e){ e.preventDefault(); closeSheet(); });
   sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
+
+  /* local time in Lisbon */
+  function clock(){ var t=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Lisbon'}).format(new Date()); [].slice.call(document.querySelectorAll('#clock, .clock2')).forEach(function(e){ e.textContent=t; }); }
+  clock(); setInterval(clock, 15000);
+
+  /* services ticker */
+  var SERVICES=['Creative direction','Strategy','YouTube packaging','Thumbnails','Video editing','Brand identity','Motion','Web'];
+  var track=document.querySelector('#ticker .track');
+  if(track){ var one=SERVICES.map(function(x){ return '<span>'+x+'<i></i></span>'; }).join(''); track.innerHTML=one+one; }
 
   /* booking */
   var book=document.getElementById('book'), bookFrame=document.getElementById('book-frame'), bookLast=null, bookLoaded=false;
