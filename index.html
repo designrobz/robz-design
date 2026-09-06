@@ -232,6 +232,33 @@ input, textarea{cursor:auto}
 .outro .row a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
 .outro .row a:hover{text-decoration-color:currentColor}
 
+/* ── letter roll (hover): original rolls up, clone rolls in ── */
+.roll{display:inline-block; position:relative; overflow:hidden; vertical-align:top; line-height:1.15}
+.roll > span{display:block; white-space:pre}
+.roll > .c{position:absolute; left:0; top:100%; }
+.roll > span > span{display:inline-block; transition:transform .55s var(--ease-out); transition-delay:calc(var(--i,0) * 18ms)}
+.roll-host:hover .roll > span > span, .roll:hover > span > span{transform:translateY(-100%)}
+
+/* ── letter wave reveal on section titles ───────────── */
+.wave{overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em}
+.wave .l{display:inline-block; transform:translateY(110%); opacity:0; will-change:transform}
+.wave.in .l{transform:none; opacity:1; transition:transform .9s var(--ease-out) calc(var(--i) * 28ms), opacity .5s var(--ease) calc(var(--i) * 28ms)}
+.wave .sp{display:inline-block; width:.28em}
+
+/* ── odometer digits on the proof numbers ───────────── */
+.odo{display:inline-flex; align-items:baseline; line-height:1}
+.odo .d{display:inline-block; height:1em; overflow:hidden; vertical-align:top}
+.odo .d span{display:block; height:1em; line-height:1}
+.odo .d .col{transform:translateY(0); transition:transform 1.4s var(--ease-out)}
+
+/* ── section numbering ──────────────────────────────── */
+.section-head{position:relative}
+.section-head .num{position:absolute; right:var(--cell); top:50%; transform:translateY(-50%); font-size:14px; font-weight:500; color:var(--muted); font-variant-numeric:tabular-nums; letter-spacing:.02em}
+
+/* ── toast ──────────────────────────────────────────── */
+.toast{position:fixed; left:50%; bottom:calc(var(--s5) + 64px + env(safe-area-inset-bottom)); transform:translate(-50%,12px); z-index:30; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-size:14px; font-weight:500; opacity:0; pointer-events:none; transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease-out)}
+.toast.on{opacity:1; transform:translate(-50%,0)}
+
 /* ── buttons ────────────────────────────────────────── */
 .actions{display:flex; justify-content:center; gap:var(--s3); flex-wrap:wrap}
 .btn{
@@ -576,6 +603,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   .reveal,.hero .brand,.hero p,.hero .reel,.hero h1 .w > span,.dock,.hero-card{opacity:1; transform:none; animation:none; transition:none}
   .hero-card .par{animation:none}
   .hero .copy,.portrait img,.giant span,.ticker .track,.hero-meta .dot{animation:none}
+  .wave .l{transform:none; opacity:1; transition:none} .roll > span > span{transition:none} .odo .d .col{transition:none}
   .tilt3d{transform:none}
   *{transition-duration:0ms !important; animation-duration:0ms !important}
 }
@@ -716,6 +744,8 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   <footer class="frame ruled foot"><div class="giant" aria-hidden="true"><span>Robz</span></div></footer>
 </main>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <!-- FLOATING NAV -->
 <nav class="dock" aria-label="Sections">
   <span class="ind" aria-hidden="true"></span>
@@ -797,11 +827,19 @@ var STATS=[
     d.innerHTML='<span class="n" data-v="'+st.value+'" data-p="'+(st.prefix||'')+'" data-s="'+(st.suffix||'')+'">'+(st.prefix||'')+'0'+(st.suffix||'')+'</span><span class="l">'+st.label+'</span>';
     statsEl.appendChild(d);
   });
+  function buildOdo(el){
+    var v=String(el.dataset.v), p=el.dataset.p, sfx=el.dataset.s;
+    var h='<span class="odo">'+(p?'<span>'+p+'</span>':'');
+    v.split('').forEach(function(ch){ h+='<span class="d"><span class="col" data-t="'+ch+'">'+'0123456789'.split('').map(function(d){return '<span>'+d+'</span>'}).join('')+'</span></span>'; });
+    h+=(sfx?'<span>'+sfx+'</span>':'')+'</span>'; el.innerHTML=h;
+  }
   function tick(el){
-    var v=+el.dataset.v, p=el.dataset.p, sfx=el.dataset.s, t0=null, dur=1400;
-    if(reduce){ el.textContent=p+v+sfx; return; }
-    function step(ts){ if(!t0) t0=ts; var k=Math.min(1,(ts-t0)/dur); var e=1-Math.pow(1-k,4); el.textContent=p+Math.round(v*e)+sfx; if(k<1) requestAnimationFrame(step); }
-    requestAnimationFrame(step);
+    if(!el.querySelector('.odo')) buildOdo(el);
+    var cols=[].slice.call(el.querySelectorAll('.col'));
+    if(reduce){ cols.forEach(function(c){ c.style.transition='none'; c.style.transform='translateY(-'+(+c.dataset.t)+'em)'; }); return; }
+    cols.forEach(function(c){ c.style.transition='none'; c.style.transform='translateY(0)'; });
+    void el.offsetHeight;
+    cols.forEach(function(c,i){ c.style.transition=''; c.style.transitionDelay=(i*90)+'ms'; c.style.transform='translateY(-'+(+c.dataset.t)+'em)'; });
   }
   if('IntersectionObserver' in window){
     var to=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ tick(e.target); to.unobserve(e.target); } }); },{threshold:.6});
@@ -989,6 +1027,46 @@ var STATS=[
   document.getElementById('sheet-close').addEventListener('click',closeSheet);
   sheet.addEventListener('cancel',function(e){ e.preventDefault(); closeSheet(); });
   sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
+
+  /* letter roll on links and button labels */
+  function rollify(el){
+    if(el.dataset.rolled) return; el.dataset.rolled='1';
+    var txt=el.textContent; var mk=function(cls){ var w=document.createElement('span'); w.className=cls; txt.split('').forEach(function(ch,i){ var c=document.createElement('span'); c.textContent=ch; c.style.setProperty('--i',String(i)); w.appendChild(c); }); return w; };
+    var wrap=document.createElement('span'); wrap.className='roll'; wrap.appendChild(mk('o')); var c=mk('c'); c.setAttribute('aria-hidden','true'); wrap.appendChild(c);
+    el.textContent=''; el.appendChild(wrap);
+  }
+  if(!reduce){
+    [].slice.call(document.querySelectorAll('.dock a:not(.cta)')).forEach(function(a){ rollify(a); a.classList.add('roll-host'); });
+    [].slice.call(document.querySelectorAll('.dock .cta .long, .dock .cta .short')).forEach(function(sp){ rollify(sp); sp.closest('a').classList.add('roll-host'); });
+    [].slice.call(document.querySelectorAll('.btn')).forEach(function(b){ var t=[].slice.call(b.childNodes).find(function(n){return n.nodeType===3 && n.textContent.trim()}); if(!t) return; var sp=document.createElement('span'); sp.textContent=t.textContent.trim(); b.replaceChild(sp,t); rollify(sp); b.classList.add('roll-host'); });
+    [].slice.call(document.querySelectorAll('.cell .name, .outro .mail, .outro .row a')).forEach(function(el){ rollify(el); el.classList.add('roll-host'); (el.closest('.cell')||el).classList.add('roll-host'); });
+  }
+
+  /* letter wave on section titles */
+  [].slice.call(document.querySelectorAll('.section-head h2, .outro h3')).forEach(function(h){
+    var words=h.textContent.split(' '); h.textContent=''; h.classList.add('wave'); var i=0;
+    words.forEach(function(w,wi){
+      var ws=document.createElement('span'); ws.style.whiteSpace='nowrap';
+      w.split('').forEach(function(ch){ var l=document.createElement('span'); l.className='l'; l.textContent=ch; l.style.setProperty('--i',String(i++)); ws.appendChild(l); });
+      h.appendChild(ws); if(wi<words.length-1){ var sp=document.createElement('span'); sp.className='sp'; h.appendChild(sp); }
+    });
+  });
+
+  /* section numbering */
+  var heads=[].slice.call(document.querySelectorAll('.section-head'));
+  heads.forEach(function(hd,i){ var n=document.createElement('span'); n.className='num'; n.textContent=String(i+1).padStart(2,'0')+'/'+String(heads.length).padStart(2,'0'); hd.appendChild(n); });
+
+  /* copy email to clipboard */
+  var toast=document.getElementById('toast'), toastT=null;
+  function say(msg){ toast.textContent=msg; toast.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ toast.classList.remove('on'); },1600); }
+  [].slice.call(document.querySelectorAll('a[href^="mailto:designrobertojr"]')).forEach(function(a){
+    if(a.classList.contains('cta')||a.classList.contains('btn')) return;
+    a.addEventListener('click',function(e){
+      if(e.metaKey||e.ctrlKey||!navigator.clipboard) return;
+      e.preventDefault();
+      navigator.clipboard.writeText('designrobertojr@gmail.com').then(function(){ say('Copied · designrobertojr@gmail.com'); }, function(){ location.href=a.href; });
+    });
+  });
 
   /* local time in Lisbon */
   function clock(){ var t=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Lisbon'}).format(new Date()); [].slice.call(document.querySelectorAll('#clock, .clock2')).forEach(function(e){ e.textContent=t; }); }
