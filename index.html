@@ -223,7 +223,10 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .hero-card .ph{font-size:12px; font-weight:500; opacity:.5}
 .hero-card.l{left:calc(var(--cell) + 1%); top:44%; --tilt:-8deg}
 .hero-card.r{right:calc(var(--cell) + 1%); top:6%; --tilt:10deg}
+.hero-card{cursor:grab; touch-action:none; user-select:none}
 .hero-card:hover{transform:translateY(-3px) scale(1.02)}
+.hero-card.drag{cursor:grabbing; z-index:3; animation-play-state:paused; transition:none; box-shadow:0 2px 4px rgba(5,15,17,.1), 0 40px 80px -28px rgba(5,15,17,.5)}
+.hero-card.drag .par{animation-play-state:paused}
 .hero-card.l{opacity:0; animation:settle 1.2s var(--ease-out) 700ms both, float-l 7s ease-in-out 1.9s infinite}
 .hero-card.r{opacity:0; animation:settle 1.2s var(--ease-out) 820ms both, float-r 8.5s ease-in-out 2.4s infinite}
 @keyframes float-l{0%,100%{translate:0 0; rotate:var(--tilt)} 50%{translate:0 -12px; rotate:calc(var(--tilt) - 1.5deg)}}
@@ -772,9 +775,53 @@ var STATS=[
     var b=document.createElement('button'); b.type='button'; b.className='hero-card '+(i?'r':'l');
     b.setAttribute('aria-label','Open '+p.title); b.setAttribute('aria-haspopup','dialog');
     b.innerHTML='<span class="par">'+(p.thumb?'<img src="'+p.thumb+'" alt="" width="1600" height="900" decoding="async">':'<span class="ph">16 : 9</span>')+'</span>';
-    b.addEventListener('click',function(){ openSheet(p, b); });
+    b.addEventListener('click',function(e){ if(b.dataset.moved==='1'){ e.preventDefault(); return; } openSheet(p, b); });
     hc.appendChild(b);
+    makeDraggable(b);
   });
+
+  /* hero cards can be picked up and thrown around; they stay where you leave them */
+  function makeDraggable(el){
+    var stage=el.parentNode.parentNode; // .copy
+    var sx=0, sy=0, ox=0, oy=0, vx=0, vy=0, lastX=0, lastY=0, lastT=0, raf=null, dragging=false;
+    function bounds(){
+      var s=stage.getBoundingClientRect(), r=el.getBoundingClientRect();
+      return {minX:-8, minY:-8, maxX:s.width-r.width+8, maxY:s.height-r.height+8};
+    }
+    function place(x,y){ var b=bounds(); x=Math.max(b.minX,Math.min(b.maxX,x)); y=Math.max(b.minY,Math.min(b.maxY,y)); el.style.left=x+'px'; el.style.top=y+'px'; el.style.right='auto'; return [x,y]; }
+    el.addEventListener('pointerdown',function(e){
+      if(e.button!==0) return;
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      var s=stage.getBoundingClientRect(), r=el.getBoundingClientRect();
+      ox=r.left-s.left; oy=r.top-s.top; sx=e.clientX; sy=e.clientY; lastX=sx; lastY=sy; lastT=performance.now(); vx=vy=0;
+      dragging=true; el.dataset.moved='0'; el.classList.add('drag'); try{ el.setPointerCapture(e.pointerId); }catch(err){}
+    });
+    el.addEventListener('pointermove',function(e){
+      if(!dragging) return;
+      var dx=e.clientX-sx, dy=e.clientY-sy;
+      if(Math.abs(dx)>4||Math.abs(dy)>4) el.dataset.moved='1';
+      var now=performance.now(), dt=Math.max(1,now-lastT);
+      vx=(e.clientX-lastX)/dt*16; vy=(e.clientY-lastY)/dt*16; lastX=e.clientX; lastY=e.clientY; lastT=now;
+      place(ox+dx, oy+dy);
+    });
+    function release(){
+      if(!dragging) return; dragging=false; el.classList.remove('drag');
+      var x=parseFloat(el.style.left)||ox, y=parseFloat(el.style.top)||oy;
+      function step(){
+        vx*=.92; vy*=.92; x+=vx; y+=vy;
+        var b=bounds();
+        if(x<b.minX||x>b.maxX){ vx*=-.5; x=Math.max(b.minX,Math.min(b.maxX,x)); }
+        if(y<b.minY||y>b.maxY){ vy*=-.5; y=Math.max(b.minY,Math.min(b.maxY,y)); }
+        place(x,y);
+        if(Math.abs(vx)>.2||Math.abs(vy)>.2) raf=requestAnimationFrame(step); else raf=null;
+      }
+      if(!reduce && (Math.abs(vx)>1||Math.abs(vy)>1)) raf=requestAnimationFrame(step);
+      setTimeout(function(){ el.dataset.moved='0'; },0);
+    }
+    el.addEventListener('pointerup',release);
+    el.addEventListener('pointercancel',release);
+    el.addEventListener('lostpointercapture',release);
+  }
 
   [].slice.call(document.querySelectorAll('#facts li')).forEach(function(li,i){ li.classList.add('reveal'); li.style.setProperty('--i', String(i+1)); });
 
