@@ -331,21 +331,13 @@ input, textarea{cursor:auto}
 @media (max-width:760px){ .quotes-ui{position:static; margin-top:var(--s5); justify-content:flex-end} }
 
 /* ── outro: inverted ────────────────────────────────── */
-#talk .section-body{background:var(--fg); color:var(--bg); padding-bottom:0}
-#talk .giant{color:var(--bg); padding-top:var(--blk); width:calc(var(--giant-scale) * 100%); margin-left:calc((1 - var(--giant-scale)) / 2 * 100%)}
+#talk .section-body{padding-bottom:0}
+#talk .giant{padding-top:var(--blk); width:calc(var(--giant-scale) * 100%); margin-left:calc((1 - var(--giant-scale)) / 2 * 100%)}
 .foot{border-top:1px solid var(--line)}
-#talk .btn.primary{background:var(--bg); color:var(--fg)}
-#talk .row{border-top-color:rgba(183,231,252,.2); color:rgba(183,231,252,.6)}
-:root[data-theme="dark"] #talk .row{border-top-color:rgba(5,15,17,.2); color:rgba(5,15,17,.6)}
-#talk .toast{color:var(--bg)}
 
 /* socials inside the footer block */
-.foot-cells{margin:var(--blk) calc(-1 * var(--cell)) 0; border-top:1px solid rgba(183,231,252,.2); border-bottom:1px solid rgba(183,231,252,.2)}
-.foot-cells .cell{border-right-color:rgba(183,231,252,.2); padding:clamp(40px,6vw,96px) var(--s4)}
-.foot-cells .cell:hover,.foot-cells .cell:focus-visible{background:var(--bg); color:var(--fg)}
-.foot-cells .cell:focus-visible{outline-color:var(--fg)}
-@media (max-width:760px){ .foot-cells .cell{border-bottom-color:rgba(183,231,252,.2)} }
-:root[data-theme="dark"] .foot-cells,:root[data-theme="dark"] .foot-cells .cell{border-color:rgba(5,15,17,.2)}
+.foot-cells{margin:var(--blk) calc(-1 * var(--cell)) 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.foot-cells .cell{padding:clamp(40px,6vw,96px) var(--s4)}
 #talk .row{margin-top:0; border-top:0; padding-top:var(--s5)}
 /* ── buttons ────────────────────────────────────────── */
 .actions{display:flex; justify-content:center; gap:var(--s3); flex-wrap:wrap}
