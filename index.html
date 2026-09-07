@@ -339,6 +339,14 @@ input, textarea{cursor:auto}
 :root[data-theme="dark"] #talk .row{border-top-color:rgba(5,15,17,.2); color:rgba(5,15,17,.6)}
 #talk .toast{color:var(--bg)}
 
+/* socials inside the footer block */
+.foot-cells{margin:var(--blk) calc(-1 * var(--cell)) 0; border-top:1px solid rgba(183,231,252,.2); border-bottom:1px solid rgba(183,231,252,.2)}
+.foot-cells .cell{border-right-color:rgba(183,231,252,.2); padding:clamp(40px,6vw,96px) var(--s4)}
+.foot-cells .cell:hover,.foot-cells .cell:focus-visible{background:var(--bg); color:var(--fg)}
+.foot-cells .cell:focus-visible{outline-color:var(--fg)}
+@media (max-width:760px){ .foot-cells .cell{border-bottom-color:rgba(183,231,252,.2)} }
+:root[data-theme="dark"] .foot-cells,:root[data-theme="dark"] .foot-cells .cell{border-color:rgba(5,15,17,.2)}
+#talk .row{margin-top:0; border-top:0; padding-top:var(--s5)}
 /* ── buttons ────────────────────────────────────────── */
 .actions{display:flex; justify-content:center; gap:var(--s3); flex-wrap:wrap}
 .btn{
@@ -785,20 +793,6 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     </div>
   </section>
 
-  <!-- SOCIALS -->
-  <section class="socials frame ruled" id="socials">
-    <div class="section-head">
-      <h2 class="reveal">Socials</h2>
-    </div>
-    <div class="section-body flush">
-    <div class="cells">
-      <a class="cell reveal" href="https://www.linkedin.com/in/roberto-junior-48630a33a" target="_blank" rel="noopener"><span class="glyph">in</span><span class="name">LinkedIn</span></a>
-      <a class="cell reveal" style="--i:1" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
-      <a class="cell reveal" style="--i:2" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
-    </div>
-    </div>
-  </section>
-
   <!-- OUTRO + FOOTER: one closing block -->
   <footer class="frame ruled foot" id="talk">
     <div class="section-body outro-body outro">
@@ -808,6 +802,11 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
         <button class="btn primary book" type="button">Book a call
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
+      </div>
+      <div class="cells foot-cells">
+        <a class="cell reveal" href="https://www.linkedin.com/in/roberto-junior-48630a33a" target="_blank" rel="noopener"><span class="glyph">in</span><span class="name">LinkedIn</span></a>
+        <a class="cell reveal" style="--i:1" href="https://ytjobs.co/talent/profile/26593" target="_blank" rel="noopener"><span class="glyph">yt</span><span class="name">YT Jobs</span></a>
+        <a class="cell reveal" style="--i:2" href="mailto:designrobertojr@gmail.com"><span class="glyph">@</span><span class="name">Email</span></a>
       </div>
       <div class="row">
         <span>© 2026 Robz®</span>
@@ -830,7 +829,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   </button>
   <a href="#work">work</a>
   <a href="#about">about</a>
-  <a href="#socials">socials</a>
+  <a href="#talk">socials</a>
   <a class="cta book" href="mailto:designrobertojr@gmail.com?subject=Call%20with%20Robz"><span class="long">book a call</span><span class="short">book</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
   </a>
