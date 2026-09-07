@@ -84,6 +84,8 @@
   --giant-scale:1.10;          /* footer ROBZ: 1 = exactly line to line, 1.10 = 10% wider (clipped at the lines) */
 
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --mono:"Geist Mono","SF Mono",Menlo,Consolas,monospace;
 
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:128px; --s11:192px;
 
@@ -110,6 +112,23 @@
   --focus:var(--sky);
   --grid:rgba(183,231,252,.045);
 }
+
+/* ── webfonts (self-hosted, OFL): a serif for the one word that matters, a mono for the small print ── */
+@font-face{font-family:"Instrument Serif"; src:url(assets/fonts/InstrumentSerif-400.woff2) format("woff2"); font-weight:400; font-style:normal; font-display:swap}
+@font-face{font-family:"Instrument Serif"; src:url(assets/fonts/InstrumentSerif-400-Italic.woff2) format("woff2"); font-weight:400; font-style:italic; font-display:swap}
+@font-face{font-family:"Geist Mono"; src:url(assets/fonts/GeistMono-400.woff2) format("woff2"); font-weight:400 500; font-style:normal; font-display:swap}
+
+/* the emphasis word: serif italic, same size as the sans around it */
+.it{font-family:var(--serif); font-style:italic; font-weight:400; font-size:1.08em; letter-spacing:-.01em; line-height:.9}
+/* the small print: mono, uppercase, tracked */
+.mono, .section-head .num, .hero-meta > span, .rail-ui .count, .quotes-ui .count, .rail .card .idx, .svc .k, .facts .k, .outro .row, .reel .label, .sheet-head .meta li span:first-child, .svc .tags span, .stat .l, .card .role, .quote .who span{
+  font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
+}
+.hero-meta > span{font-size:12px}
+.card .role, .stat .l{font-size:12px; margin-top:6px}
+.quote .who span{font-size:11px}
+.svc .tags span{font-size:11px; padding:7px 12px}
+.reel .label{font-size:12px}
 
 /* ── base ───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
@@ -297,7 +316,7 @@ input, textarea{cursor:auto}
 .quotes{display:grid; grid-template-columns:1fr; padding:var(--blk) var(--cell); position:relative; min-height:clamp(260px,32vw,440px)}
 .quote{grid-area:1/1; margin:0; display:flex; flex-direction:column; justify-content:center; gap:clamp(20px,2.5vw,32px); opacity:0; transform:translateY(16px); transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out); pointer-events:none; padding:0}
 .quote.on{opacity:1; transform:none; pointer-events:auto}
-.quote p{margin:0; font-size:clamp(24px,3.2vw,48px); font-weight:600; line-height:1.15; letter-spacing:-.03em; text-wrap:balance; max-width:22ch}
+.quote p{margin:0; font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(30px,4vw,60px); line-height:1.08; letter-spacing:-.015em; text-wrap:balance; max-width:22ch}
 .quote p::before{content:"\201C"; margin-left:-.45em; opacity:.45}
 .quote p::after{content:"\201D"; opacity:.45}
 .quote footer{display:flex; align-items:center; gap:var(--s3)}
@@ -657,7 +676,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
       <span><i class="dot" aria-hidden="true"></i>Available Q4 2026</span>
     </div>
     <div class="copy">
-      <h1><span class="w"><span>Creative</span></span> <span class="w"><span>Partner</span></span></h1>
+      <h1><span class="w"><span>Creative</span></span> <span class="w"><span class="it">Partner</span></span></h1>
       <p>For founders and brands that want to be seen, remembered and chosen.</p>
       <div class="actions">
         <button class="btn primary book" type="button">Book a call
@@ -698,7 +717,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   <!-- SERVICES -->
   <section class="frame ruled" id="services">
     <div class="section-head">
-      <h2 class="reveal">What I do</h2>
+      <h2 class="reveal">What I <em class="it">do</em></h2>
     </div>
     <div class="section-body flush">
       <ul class="svc" id="svc"></ul>
@@ -708,7 +727,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   <!-- TESTIMONIALS -->
   <section class="frame ruled" id="testimonials">
     <div class="section-head">
-      <h2 class="reveal">Kind words</h2>
+      <h2 class="reveal">Kind <em class="it">words</em></h2>
     </div>
     <div class="section-body flush">
       <div class="quotes" id="quotes">
@@ -743,7 +762,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
       <div class="slot photo"><div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, creative partner based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div></div>
       <div class="slot text"><div class="about-copy">
         <div class="intro reveal">
-          <h3>You have something worth attention. I make sure it gets it.</h3>
+          <h3>You have something <em class="it">worth attention.</em> I make sure it gets it.</h3>
           <p>Strategy, design and video. One person, start to finish.</p>
           <p>Based in Lisbon, working with the US and the UK.</p>
         </div>
@@ -779,7 +798,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   <!-- OUTRO -->
   <section class="frame ruled" id="talk">
     <div class="section-body outro-body outro">
-      <h3 class="reveal">Let's make it worth their attention.</h3>
+      <h3 class="reveal">Let's make it <em class="it">worth</em> their attention.</h3>
       <a class="mail reveal" style="--i:1" href="mailto:designrobertojr@gmail.com">designrobertojr@gmail.com</a>
       <div class="actions reveal" style="--i:2; justify-content:flex-start">
         <button class="btn primary book" type="button">Book a call
@@ -1145,12 +1164,17 @@ var STATS=[
 
   /* letter wave on section titles */
   [].slice.call(document.querySelectorAll('.section-head h2, .outro h3')).forEach(function(h){
-    var words=h.textContent.split(' '); h.textContent=''; h.classList.add('wave'); var i=0;
-    words.forEach(function(w,wi){
-      var ws=document.createElement('span'); ws.style.whiteSpace='nowrap';
-      w.split('').forEach(function(ch){ var l=document.createElement('span'); l.className='l'; l.textContent=ch; l.style.setProperty('--i',String(i++)); ws.appendChild(l); });
-      h.appendChild(ws); if(wi<words.length-1){ var sp=document.createElement('span'); sp.className='sp'; h.appendChild(sp); }
-    });
+    var nodes=[].slice.call(h.childNodes); h.textContent=''; h.classList.add('wave'); var i=0;
+    function addWords(text, cls){
+      var words=text.split(' ');
+      words.forEach(function(w,wi){
+        if(w){ var ws=document.createElement('span'); ws.style.whiteSpace='nowrap'; if(cls) ws.className=cls;
+          w.split('').forEach(function(ch){ var l=document.createElement('span'); l.className='l'; l.textContent=ch; l.style.setProperty('--i',String(i++)); ws.appendChild(l); });
+          h.appendChild(ws); }
+        if(wi<words.length-1){ var sp=document.createElement('span'); sp.className='sp'; h.appendChild(sp); }
+      });
+    }
+    nodes.forEach(function(n){ if(n.nodeType===3) addWords(n.textContent); else addWords(n.textContent, n.className); });
   });
 
   /* section numbering */
