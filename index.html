@@ -240,6 +240,7 @@ input, textarea{cursor:auto}
 .outro .mail{display:inline-block; font-size:clamp(20px,2.4vw,36px); font-weight:600; letter-spacing:-.02em; margin-bottom:var(--s6); background-image:linear-gradient(currentColor,currentColor); background-size:100% 2px; background-repeat:no-repeat; background-position:0 100%; transition:background-size var(--t-base) var(--ease-out)}
 .outro .mail:hover{background-size:0 2px}
 .outro .row{display:flex; justify-content:space-between; align-items:center; gap:var(--s4); flex-wrap:wrap; margin-top:var(--blk); padding-top:var(--s4); border-top:1px solid var(--line); font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums}
+#talk .row{margin-inline:calc(-1 * var(--cell)); padding-inline:var(--cell)}
 .outro .row a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line-strong)}
 .outro .row a:hover{text-decoration-color:currentColor}
 
@@ -330,7 +331,9 @@ input, textarea{cursor:auto}
 @media (max-width:760px){ .quotes-ui{position:static; margin-top:var(--s5); justify-content:flex-end} }
 
 /* ── outro: inverted ────────────────────────────────── */
-#talk .section-body{background:var(--fg); color:var(--bg)}
+#talk .section-body{background:var(--fg); color:var(--bg); padding-bottom:0}
+#talk .giant{color:var(--bg); padding-top:var(--blk); width:calc(var(--giant-scale) * 100%); margin-left:calc((1 - var(--giant-scale)) / 2 * 100%)}
+.foot{border-top:1px solid var(--line)}
 #talk .btn.primary{background:var(--bg); color:var(--fg)}
 #talk .row{border-top-color:rgba(183,231,252,.2); color:rgba(183,231,252,.6)}
 :root[data-theme="dark"] #talk .row{border-top-color:rgba(5,15,17,.2); color:rgba(5,15,17,.6)}
@@ -499,7 +502,8 @@ dialog.booking .sheet-scroll{overflow:hidden}
 .cell .glyph{font-size:clamp(44px,5vw,72px); font-weight:700; letter-spacing:-.03em; line-height:1}
 .cell .name{font-size:15px; font-weight:500; opacity:.7}
 .giant{
-  width:calc(var(--giant-scale) * 100%); margin:0 0 0 calc((1 - var(--giant-scale)) / 2 * 100%); padding-top:var(--sec); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
+  width:calc(var(--giant-scale) * 100%); margin:0 0 0 calc((1 - var(--giant-scale)) / 2 * 100%); padding-top:var(--sec);
+  color:var(--fg); overflow:hidden; height:.6em; box-sizing:content-box; line-height:1;
   font-weight:700; text-transform:uppercase; user-select:none; white-space:nowrap;
 }
 .giant span{display:inline-block; line-height:1; letter-spacing:-.04em; transform:translateY(-.05em)}
@@ -795,8 +799,8 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
     </div>
   </section>
 
-  <!-- OUTRO -->
-  <section class="frame ruled" id="talk">
+  <!-- OUTRO + FOOTER: one closing block -->
+  <footer class="frame ruled foot" id="talk">
     <div class="section-body outro-body outro">
       <h3 class="reveal">Let's make it <em class="it">worth</em> their attention.</h3>
       <a class="mail reveal" style="--i:1" href="mailto:designrobertojr@gmail.com">designrobertojr@gmail.com</a>
@@ -810,9 +814,9 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
         <span>Lisbon, <span class="clock2">--:--</span></span>
         <a href="#top">Back to top</a>
       </div>
+      <div class="giant" aria-hidden="true"><span>Robz</span></div>
     </div>
-  </section>
-  <footer class="frame ruled foot"><div class="giant" aria-hidden="true"><span>Robz</span></div></footer>
+  </footer>
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
