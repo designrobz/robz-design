@@ -219,11 +219,14 @@ section:first-child{border-top:0}
   --cur-grabbing:url(assets/cursor-grabbing-dark.svg) 16 18, grabbing;
 }
 html, body{cursor:var(--cur-arrow)}
-a, button, .card, .cell, .reel, .stat, .quote, label, select, summary, [role="button"]{cursor:var(--cur-pointer)}
-.hero-card{cursor:var(--cur-grab)}
-.hero-card.drag{cursor:var(--cur-grabbing)}
+a, button, .card, .cell, label, select, summary, [role="button"]{cursor:var(--cur-pointer)}
+a *, button *, .card *, .cell *{cursor:inherit}
+.hero-card, .hero-card *{cursor:var(--cur-grab)}
+.hero-card.drag, .hero-card.drag *{cursor:var(--cur-grabbing)}
+.rail.dragging, .rail.dragging *{cursor:var(--cur-grabbing)}
+dialog, dialog *{cursor:var(--cur-arrow)} dialog a, dialog button, dialog a *, dialog button *{cursor:var(--cur-pointer)}
 input, textarea{cursor:auto}
-@media (hover:none){ html, body, a, button, .card, .cell, .reel, .stat, .quote, .hero-card{cursor:auto} }
+@media (hover:none){ html, body, a, button, .card, .cell, .hero-card, .rail{cursor:auto} }
 
 /* ── hero meta bar: place, local time, availability ───── */
 .hero-meta{display:flex; justify-content:space-between; align-items:center; padding:0 var(--cell); font-size:14px; font-weight:500; color:var(--muted); letter-spacing:-.005em; font-variant-numeric:tabular-nums}
