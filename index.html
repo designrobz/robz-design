@@ -132,7 +132,7 @@
 
 /* ── base ───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth; scroll-padding-top:var(--s6)}
+html{scroll-behavior:smooth; scroll-padding-top:var(--s6); overscroll-behavior-y:none}
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
 body{
   margin:0; background:var(--bg); color:var(--fg);
@@ -204,7 +204,7 @@ section:first-child{border-top:0}
 .hero .brand{display:inline-flex; font-size:32px}
 .hero .copy{text-align:center; padding:clamp(40px,6vw,88px) var(--cell) clamp(36px,5vw,72px)}
 .hero h1{margin:0; font-weight:700; font-size:clamp(60px,11vw,184px); line-height:.92; letter-spacing:-.045em; text-wrap:balance}
-.hero p{margin:clamp(20px,2.5vw,32px) auto 0; max-width:30ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
+.hero p{margin:clamp(20px,2.5vw,32px) auto 0; max-width:52ch; font-size:clamp(19px,1.7vw,28px); line-height:1.25; letter-spacing:-.014em; color:var(--muted); text-wrap:balance}
 /* ── cursors: one family, drawn in the brand colours ──── */
 :root{
   --cur-arrow:url(assets/cursor-arrow-light.svg) 5 3, auto;
@@ -280,7 +280,7 @@ input, textarea{cursor:auto}
 
 /* ── work rail: big, draggable, snaps ──────────────── */
 .rail-wrap{position:relative}
-.rail{display:flex; gap:var(--gap); padding:var(--blk) var(--cell); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; cursor:var(--cur-grab)}
+.rail{display:flex; gap:var(--gap); padding:var(--blk) var(--cell); scroll-padding-inline:var(--cell); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; cursor:var(--cur-grab)}
 .rail::-webkit-scrollbar{display:none}
 .rail.dragging{cursor:var(--cur-grabbing); scroll-snap-type:none; user-select:none}
 .rail .slot{flex:0 0 auto; width:clamp(300px, 58vw, 880px); scroll-snap-align:start; padding:0}
@@ -320,7 +320,7 @@ input, textarea{cursor:auto}
 .quotes{display:grid; grid-template-columns:1fr; padding:var(--blk) var(--cell); position:relative; min-height:clamp(260px,32vw,440px)}
 .quote{grid-area:1/1; margin:0; display:flex; flex-direction:column; justify-content:center; gap:clamp(20px,2.5vw,32px); opacity:0; transform:translateY(16px); transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out); pointer-events:none; padding:0}
 .quote.on{opacity:1; transform:none; pointer-events:auto}
-.quote p{margin:0; font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(30px,4vw,60px); line-height:1.08; letter-spacing:-.015em; text-wrap:balance; max-width:22ch}
+.quote p{margin:0; font-size:clamp(24px,3.2vw,48px); font-weight:600; line-height:1.15; letter-spacing:-.03em; text-wrap:balance; max-width:22ch}
 .quote p::before{content:"\201C"; margin-left:-.45em; opacity:.45}
 .quote p::after{content:"\201D"; opacity:.45}
 .quote footer{display:flex; align-items:center; gap:var(--s3)}
@@ -369,7 +369,7 @@ dialog.booking .sheet-scroll{overflow:hidden}
 /* hero side cards: two pieces of work flanking the headline (from the original draft, straight, light parallax) */
 .hero .copy{position:relative}
 .hero-card{
-  position:absolute; width:18%; aspect-ratio:4/5; border-radius:var(--r-m); overflow:hidden;
+  position:absolute; width:15%; aspect-ratio:4/5; border-radius:var(--r-m); overflow:hidden;
   --tilt:0deg; rotate:var(--tilt);
   background:var(--surface); color:var(--on-surface); display:grid; place-items:center; padding:0; z-index:1;
   box-shadow:0 1px 2px rgba(5,15,17,.08), 0 24px 60px -24px rgba(5,15,17,.35);
@@ -377,8 +377,9 @@ dialog.booking .sheet-scroll{overflow:hidden}
 }
 .hero-card img{width:100%; height:100%; object-fit:cover}
 .hero-card .ph{font-size:12px; font-weight:500; opacity:.5}
-.hero-card.l{left:6%; top:12%; --tilt:-8deg}
-.hero-card.r{right:6%; top:27%; --tilt:10deg}
+.hero-card.l{left:3%; top:6%; --tilt:-8deg}
+.hero-card.r{right:3%; top:44%; --tilt:10deg}
+.hero .copy > h1, .hero .copy > p, .hero .copy > .actions{position:relative; z-index:2}
 .hero-card{touch-action:none; user-select:none}
 .hero-card:hover{transform:translateY(-3px) scale(1.02)}
 .hero-card.drag{z-index:3; animation-play-state:paused; transition:none; box-shadow:0 2px 4px rgba(5,15,17,.1), 0 40px 80px -28px rgba(5,15,17,.5)}
@@ -633,7 +634,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
 
 /* load sequence in the hero */
 .hero .brand{opacity:0; animation:rise var(--t-reveal) var(--ease-out) 80ms both}
-.hero h1 .w{display:block; overflow:hidden; padding-bottom:.06em; margin-bottom:-.06em}
+.hero h1 .w{display:block; overflow:hidden; padding-bottom:.22em; margin-bottom:-.22em}
 .hero h1 .w > span{display:inline-block; transform:translateY(110%); animation:mask-up 1s var(--ease-out) both}
 .hero h1 .w:nth-child(2) > span{animation-delay:90ms}
 .hero p{opacity:0; animation:rise var(--t-reveal) var(--ease-out) 380ms both}
@@ -724,7 +725,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   <!-- SERVICES -->
   <section class="frame ruled" id="services">
     <div class="section-head">
-      <h2 class="reveal">What I <em class="it">do</em></h2>
+      <h2 class="reveal">What I do</h2>
     </div>
     <div class="section-body flush">
       <ul class="svc" id="svc"></ul>
@@ -734,7 +735,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
   <!-- TESTIMONIALS -->
   <section class="frame ruled" id="testimonials">
     <div class="section-head">
-      <h2 class="reveal">Kind <em class="it">words</em></h2>
+      <h2 class="reveal">Kind words</h2>
     </div>
     <div class="section-body flush">
       <div class="quotes" id="quotes">
@@ -769,7 +770,7 @@ dialog.sheet[open] .sheet-body > :nth-child(4){animation-delay:240ms}
       <div class="slot photo"><div class="portrait reveal"><img src="assets/roberto.jpg" alt="Roberto Junior, YouTube packaging strategist based in Lisbon" width="1200" height="1200" loading="lazy" decoding="async"></div></div>
       <div class="slot text"><div class="about-copy">
         <div class="intro reveal">
-          <h3>You have something <em class="it">worth attention.</em> I make sure it gets the click.</h3>
+          <h3>You have something worth attention. I make sure it gets the click.</h3>
           <p>Ideas, titles and thumbnails. One person, from the outlier research to the final file.</p>
           <p>Based in Lisbon, working US and UK hours.</p>
         </div>
