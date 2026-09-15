@@ -208,15 +208,15 @@ section:first-child{border-top:0}
 /* ── cursors: one family, drawn in the brand colours ──── */
 :root{
   --cur-arrow:url(assets/cursor-arrow-light.svg) 5 3, auto;
-  --cur-pointer:url(assets/cursor-pointer-light.svg) 16 2, pointer;
-  --cur-grab:url(assets/cursor-grab-light.svg) 16 18, grab;
-  --cur-grabbing:url(assets/cursor-grabbing-light.svg) 16 18, grabbing;
+  --cur-pointer:url(assets/cursor-arrow-dark.svg) 5 3, pointer;  /* same arrow, inverted */
+  --cur-grab:grab;
+  --cur-grabbing:grabbing;
 }
 :root[data-theme="dark"]{
   --cur-arrow:url(assets/cursor-arrow-dark.svg) 5 3, auto;
-  --cur-pointer:url(assets/cursor-pointer-dark.svg) 16 2, pointer;
-  --cur-grab:url(assets/cursor-grab-dark.svg) 16 18, grab;
-  --cur-grabbing:url(assets/cursor-grabbing-dark.svg) 16 18, grabbing;
+  --cur-pointer:url(assets/cursor-arrow-light.svg) 5 3, pointer;
+  --cur-grab:grab;
+  --cur-grabbing:grabbing;
 }
 html, body{cursor:var(--cur-arrow)}
 a, button, .card, .cell, label, select, summary, [role="button"]{cursor:var(--cur-pointer)}
